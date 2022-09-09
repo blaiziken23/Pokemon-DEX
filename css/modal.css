@@ -1,0 +1,36 @@
+.modal-content {
+  position: relative;
+  background: var(--white);
+}
+.modal-body .row > .column {
+  padding: 0;
+}
+.modal-body .column .card {
+  box-shadow: none !important;
+}
+.modal-body .column .card, .card-header {
+  background: none;
+}
+.modal-body .column .card .card-title {
+  font-size: 1.9em;
+}
+.modal-body .column .card-header {
+  text-transform: uppercase;
+}
+.modal-body .column:first-child .card-body {
+  padding-top: 0 !important;
+}
+.modal-body .column .id {
+  font-size: 1.1em;
+  padding: 5px 10px;
+}
+.modal-body .column .id::before {
+  content: "#";
+}
+.progress {
+  background: var(--gray);
+}
+.progress, .progress-bar {
+  border-radius: 10px;
+  color: #000;
+}

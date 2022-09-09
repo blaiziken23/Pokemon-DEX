@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+:root {
+  --white: #FAFAFA;
+  --dark: #263238;
+  --darkgray: #607D8B;
+  --gray: #ECEFF1;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--white);
+  color: var(--dark);
+  font-family: 'Roboto Slab', serif;
+}
+.btn {
+  color: var(--white);
+  background: var(--dark);
+  font-size: 13px;
+}
+button:focus, input:focus {
+  box-shadow: none !important;
+}
+.card, .card li, .card-header, .modal-header {
+  border: none;
+  background: var(--white);
+  text-transform: capitalize;
+}
+.card-body li {
+  color: var(--white);
+  padding: 3px 6px;
+  border-radius: 5px !important;
+}
+
+/* scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--gray); 
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:  var(--darkgray);
+  border-radius: 5px;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark); 
+}
+
+/* loading */
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(38 50 56 / 25%);
+}
+.modalLoad .custom-loader {
+  background: 
+    radial-gradient(farthest-side, var(--gray) 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%, var(--gray));
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+}
+.custom-loader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: 
+    radial-gradient(farthest-side, var(--dark) 94%,#0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%, var(--dark));
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+  animation: s3 .5s infinite linear;
+}
+@keyframes s3 { 100%{transform: rotate(1turn)} }
