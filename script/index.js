@@ -65,7 +65,6 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
     for (let i = 0; i < 20; i++) {
       const randomPokemon = random(data.count, 0);
       const url = data.results[randomPokemon].url;
-      // console.log(url)
       randomData.push(api_fetch(url));
     }
 

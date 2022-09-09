@@ -79,10 +79,15 @@ const modalDialog = document.querySelector(".modal-dialog");
 
 const modalPokedex = async (pokemonName) => {
   try {
-    modalLoad.classList.remove("d-none")
-    const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+    modalLoad.classList.remove("d-none");
+    const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
     const species = await api_fetch(pokemonInfo.species.url);
-    const evolution = await api_fetch(species.evolution_chain.url);
+    let evolution;
+    if(species.evolution_chain != null) { 
+      evolution = await api_fetch(species.evolution_chain.url); 
+      console.log("Evolution", evolution); 
+    }
+    
     const textEntries = await species.flavor_text_entries.filter(eng => eng.language.name === "en");
 
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
@@ -91,14 +96,14 @@ const modalPokedex = async (pokemonName) => {
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = Promise.all(ability).then(x => { return x });
 
-    const promises = await Promise.all([varieties, abilities])
+    const promises = await Promise.all([varieties, abilities]);
 
     console.log(promises)
    
     // pokemonColor 
     let colorPokemon;
     for (const pokemonColor in pokemonColors) {
-      if (species.color.name == pokemonColor) colorPokemon = pokemonColors[pokemonColor];
+      if(species.color.name == pokemonColor) colorPokemon = pokemonColors[pokemonColor];
     }
 
     // stats
@@ -172,7 +177,7 @@ const modalPokedex = async (pokemonName) => {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
-                      ${textEntries[0].flavor_text}
+                     
                     </div>
                     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">...</div>
                     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab">...</div>
