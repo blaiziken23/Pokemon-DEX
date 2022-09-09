@@ -29,8 +29,9 @@
 }
 .progress {
   background: var(--gray);
+  border-left: 5px solid var(--darkgray);
 }
 .progress, .progress-bar {
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   color: #000;
 }

@@ -82,13 +82,12 @@ const modalPokedex = async (pokemonName) => {
     modalLoad.classList.remove("d-none");
     const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
     const species = await api_fetch(pokemonInfo.species.url);
+    const textEntries = await species.flavor_text_entries.filter(eng => eng.language.name === "en");
     let evolution;
     if(species.evolution_chain != null) { 
       evolution = await api_fetch(species.evolution_chain.url); 
       console.log("Evolution", evolution); 
     }
-    
-    const textEntries = await species.flavor_text_entries.filter(eng => eng.language.name === "en");
 
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
     const varieties = Promise.all(varity).then(x => { return x });
@@ -96,7 +95,10 @@ const modalPokedex = async (pokemonName) => {
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = Promise.all(ability).then(x => { return x });
 
-    const promises = await Promise.all([varieties, abilities]);
+    const type = pokemonInfo.types.map(type => api_fetch(type.type.url));
+    const types = Promise.all(type).then(types => {return types});
+
+    const promises = await Promise.all([varieties, abilities, types]);
 
     console.log(promises)
    
@@ -132,66 +134,58 @@ const modalPokedex = async (pokemonName) => {
       }).join("")
     )
     
-    // text Entries
-    
-
-
-
     // modal Content
-    setTimeout(() => {
-      modalDialog.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header shadow-sm" style="background:${colorPokemon}">
-            <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body px-0"> 
-            <div class="container"> 
-              <div class="row gap-3">
-                <div class="column col-md-4">
-                  ${ pokemon.card() }
-                </div>
-                <div class="column col-md">
-                  <div class="card">
-                    <div class="card-header py-0"> 
-                      <h5 class="card-text"> Pokémon Stats </h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="card-text"> ${stats} </div>
-                      <div class="card-text">  </div>
-                    </div>
+    modalDialog.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-header shadow-sm" style="background:${colorPokemon}">
+          <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-0"> 
+          <div class="container"> 
+            <div class="row gap-3">
+              <div class="column col-md-4">
+                ${ pokemon.card() }
+              </div>
+              <div class="column col-md">
+                <div class="card">
+                  <div class="card-header py-0"> 
+                    <h5 class="card-text"> Pokémon Stats </h5>
                   </div>
-                </div>
-                <div class="column col-xl-4">
-                  <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane">
-                        Text Entries
-                      </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane">Profile</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                      <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane">Contact</button>
-                    </li>
-                  </ul>
-                  <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
-                     
-                    </div>
-                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                  <div class="card-body">
+                    <div class="card-text"> ${stats} </div>
+                    <div class="card-text">  </div>
                   </div>
                 </div>
               </div>
-
-            </div> 
-          </div>
-        </div> `
-        document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = "" });
-        document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
-        modalLoad.classList.add("d-none");
-    });
+              <div class="column col-xl-4">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane">
+                      Text Entries
+                    </button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane">Profile</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane">Contact</button>
+                  </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab">
+                    ${textEntries[0].flavor_text}
+                  </div>
+                  <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                  <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div> `
+    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = "" });
+    document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
+    modalLoad.classList.add("d-none");
 
   } catch (error) {
     alert("Please Try Again!!!");
