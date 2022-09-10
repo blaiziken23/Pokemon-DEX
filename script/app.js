@@ -197,7 +197,7 @@ const modalPokedex = async (pokemonName) => {
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pokemonProfile" type="button"> Profile </button>
                       </li>
                       <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button">Contact</button>
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#pokemonType" type="button"> Type </button>
                       </li>
                     </ul>
                   </div>
@@ -223,7 +223,9 @@ const modalPokedex = async (pokemonName) => {
                           ${ effectEntries }
                         </div>
                       </div>
-                      <div class="tab-pane fade" id="contact-tab-pane">...</div>
+                      <div class="tab-pane fade" id="pokemonType">
+                        Pokemon Type
+                      </div>
                     </div>
                   </div>
                 </card>
