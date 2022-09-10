@@ -137,7 +137,7 @@ const modalPokedex = async (pokemonName) => {
       const version = textEntries[randomText].version.name;
       return ` 
         <figure class="m-0">
-          <blockquote class="blockquote">
+          <blockquote class="blockquote mb-2">
             <p class=""> ${ entries } </p>
           </blockquote>
           <figcaption class="blockquote-footer m-0">
@@ -152,14 +152,15 @@ const modalPokedex = async (pokemonName) => {
     const abilities = await Promise.all(ability).then(x => { return x });
     const effectEntries = abilities.map((effectEntry, i) => { 
       console.log(effectEntry)
-      const eng = effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getText => getText.effect);
-      console.log(eng)
+      let effect;
+      let shortEffect;
+      effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getEffect => { effect = getEffect.effect; shortEffect = getEffect.short_effect; });
       return `
         <ol class="list-group mb-2">
           <li class="list-group-item p-0">
             <div class="me-auto">
-              <div class="fw-bold text-capitalize">${ effectEntry.name }</div>
-              ${ eng }
+              <h6 class="fw-bold text-capitalize">${ effectEntry.name }</h6>
+              ${ effect }
             </div>
           </li>
         </ol>`
@@ -216,8 +217,8 @@ const modalPokedex = async (pokemonName) => {
                           ${ await randomEntries() }
                         </div>
                         <div class="card-text">
-                          <nav class="navbar">
-                            <h5 class="card-text m-0"> Pokemon Ability </h5>
+                          <nav class="navbar pt-0">
+                            <h5 class="card-text"> Pokemon Ability </h5>
                           </nav>
                           ${ effectEntries }
                         </div>
