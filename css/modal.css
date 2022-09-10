@@ -37,12 +37,15 @@
 }
 
 /* nav-tabs */
-.blockquote {
+.blockquote, .modal-body .list-group li {
   font-size: 1em;
   text-transform: initial;
+  text-align: justify;
 }
 .nav-tabs .nav-link.active {
   background: var(--white);
+  border-bottom: 1px solid var(--white);
+  color: var(--dark) !important;
 }
 .nav-tabs .nav-item .nav-link {
   color: var(--darkgray);
@@ -52,4 +55,14 @@
 }
 .modal-body .column:nth-child(3) .card-header {
   padding-bottom: 0;
+}
+.modal-body .list-group li {
+  color: var(--darkgray) !important;
+  font-size: 15px;
+}
+
+@media screen and (max-width: 992px) {
+  
+
+
 }

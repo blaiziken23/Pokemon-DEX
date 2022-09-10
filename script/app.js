@@ -91,15 +91,11 @@ const modalPokedex = async (pokemonName) => {
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
     const varieties = Promise.all(varity).then(x => { return x });
     
-    const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
-    const abilities = Promise.all(ability).then(x => { return x });
-
     const type = pokemonInfo.types.map(type => api_fetch(type.type.url));
     const types = Promise.all(type).then(types => {return types});
 
-    const promises = await Promise.all([varieties, abilities, types]);
-
-    console.log(promises)
+    // const promises = await Promise.all([varieties, abilities, types]);
+    // console.log(promises)
    
     // pokemonColor 
     let colorPokemon;
@@ -145,10 +141,29 @@ const modalPokedex = async (pokemonName) => {
             <p class=""> ${ entries } </p>
           </blockquote>
           <figcaption class="blockquote-footer m-0">
-            Pokemon <cite title="${ version }">${ version }</cite>
+            <cite title="${ version }">Pokemon ${ version }</cite>
           </figcaption>
-        </figure> `
+        </figure> 
+        <hr class="my-2">`
     }
+
+    // ability
+    const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
+    const abilities = await Promise.all(ability).then(x => { return x });
+    const effectEntries = abilities.map((effectEntry, i) => { 
+      console.log(effectEntry)
+      const eng = effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getText => getText.effect);
+      console.log(eng)
+      return `
+        <ol class="list-group mb-2">
+          <li class="list-group-item p-0">
+            <div class="me-auto">
+              <div class="fw-bold text-capitalize">${ effectEntry.name }</div>
+              ${ eng }
+            </div>
+          </li>
+        </ol>`
+    }).join("")
 
     // modal Content
     modalDialog.innerHTML = `
@@ -159,7 +174,7 @@ const modalPokedex = async (pokemonName) => {
         <div class="modal-body px-0"> 
           <div class="container"> 
             <div class="row gap-3">
-              <div class="column col-md-4">
+              <div class="column col-md">
                 ${ pokemon.card() }
               </div>
               <div class="column col-md">
@@ -173,15 +188,12 @@ const modalPokedex = async (pokemonName) => {
                   </div>
                 </div>
               </div>
-              <div class="column col-lg-4">
+              <div class="column col-xl">
                 <div class="card"> 
                   <div class="card-header"> 
                     <ul class="nav nav-tabs" id="myTab">
                       <li class="nav-item">
-                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pokemonInfo" type="button"> Info </button>
-                      </li>
-                      <li class="nav-item">
-                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button">Profile</button>
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pokemonProfile" type="button"> Profile </button>
                       </li>
                       <li class="nav-item">
                         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button">Contact</button>
@@ -190,7 +202,7 @@ const modalPokedex = async (pokemonName) => {
                   </div>
                   <div class="card-body"> 
                     <div class="tab-content">
-                      <div class="tab-pane fade show active" id="pokemonInfo">
+                      <div class="tab-pane fade show active" id="pokemonProfile">
                         <nav class="navbar">
                           <h5 class="card-text m-0"> Pokemon Entries </h5>
                             <button type="button" class="btn" id="random-entries-btn">
@@ -203,8 +215,13 @@ const modalPokedex = async (pokemonName) => {
                         <div class="card-text random-entries">
                           ${ await randomEntries() }
                         </div>
+                        <div class="card-text">
+                          <nav class="navbar">
+                            <h5 class="card-text m-0"> Pokemon Ability </h5>
+                          </nav>
+                          ${ effectEntries }
+                        </div>
                       </div>
-                      <div class="tab-pane fade" id="profile-tab-pane">...</div>
                       <div class="tab-pane fade" id="contact-tab-pane">...</div>
                     </div>
                   </div>
@@ -218,12 +235,9 @@ const modalPokedex = async (pokemonName) => {
     document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = "" });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
-      document.querySelector(".random-entries").innerHTML = `${await randomEntries()}`
+      document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
-    // document.querySelector(".nav-tabs ").style.borderBottom = `1px solid ${ colorPokemon }`
-    // document.querySelector("#random-entries").addEventListener("click", async () => {
-    //   document.querySelector("#pokemonInfo").innerHTML = await randomEntries();
-    // })
+    document.querySelector(".nav-tabs ").style.borderBottom = `1px solid ${ colorPokemon }`
     modalLoad.classList.add("d-none");
 
   } catch (error) {
