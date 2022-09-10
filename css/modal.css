@@ -1,6 +1,7 @@
 .modal-content {
   position: relative;
   background: var(--white);
+  color: var(--darkgray);
 }
 .modal-body .row > .column {
   padding: 0;
@@ -12,7 +13,7 @@
   background: none;
 }
 .modal-body .column .card .card-title {
-  font-size: 1.9em;
+  font-size: 1.8em;
 }
 .modal-body .column .card-header {
   text-transform: uppercase;
@@ -21,17 +22,34 @@
   padding-top: 0 !important;
 }
 .modal-body .column .id {
-  font-size: 1.1em;
-  padding: 5px 10px;
+  font-size: 1em;
+  padding: 3px 8px;
 }
 .modal-body .column .id::before {
   content: "#";
 }
 .progress {
   background: var(--gray);
-  border-left: 5px solid var(--darkgray);
 }
 .progress, .progress-bar {
-  border-radius: 0 10px 10px 0;
+  border-radius: 10px;
   color: #000;
+}
+
+/* nav-tabs */
+.blockquote {
+  font-size: 1em;
+  text-transform: initial;
+}
+.nav-tabs .nav-link.active {
+  background: var(--white);
+}
+.nav-tabs .nav-item .nav-link {
+  color: var(--darkgray);
+}
+.modal-body .column:nth-child(3) .card-body {
+  padding-top: 0;
+}
+.modal-body .column:nth-child(3) .card-header {
+  padding-bottom: 0;
 }

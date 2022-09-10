@@ -15,7 +15,7 @@ html {
 }
 body {
   background: var(--white);
-  color: var(--dark);
+  color: var(--darkgray);
   font-family: 'Roboto Slab', serif;
 }
 .btn {

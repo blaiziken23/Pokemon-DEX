@@ -63,7 +63,7 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
     let randomData = [];
     const data = await api_fetch(`https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`);
     for (let i = 0; i < 20; i++) {
-      const randomPokemon = random(data.count, 0);
+      const randomPokemon = random(data.count - 1, 0);
       const url = data.results[randomPokemon].url;
       randomData.push(api_fetch(url));
     }
@@ -81,7 +81,6 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
     console.log(error);
   }
   document.querySelector("#input-search").value = "";
-
 });
 
 
@@ -89,7 +88,7 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
 document.querySelector("#search-pokemon").addEventListener("click", async (e) => {
   e.preventDefault();
   const inputSearch = document.querySelector("#input-search");
-  const pokeName = inputSearch.value = inputSearch.value.toLowerCase().trim().replace(/ /g, "-");
+  const pokeName = inputSearch.value.toLowerCase().trim().replace(/ /g, "-");
   modalPokedex(pokeName)
   document.querySelector("#input-search").value = "";
 
