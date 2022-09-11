@@ -104,14 +104,14 @@ const modalPokedex = async (pokemonName) => {
     }
 
     // stats
-    const stats = pokemonInfo.stats.map(x => {
-      const value = (x.base_stat * 100) / 300;    /* maxValue = 300 */
+    const stats = pokemonInfo.stats.map(stat => {
+      const value = (stat.base_stat * 100) / 300;    /* maxValue = 300 */
       return `
         <div class="progress-div pb-2"> 
-          <label for="${x.stat.name}" class="form-label m-0">${x.stat.name}</label>
-          <div class="progress" title="${x.base_stat}">
-            <div class="progress-bar animate__animated animate__fadeInLeft" id="${x.stat.name}" role="progressbar" style="width:${value}%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
-              ${x.base_stat}
+          <label for="${stat.stat.name}" class="form-label m-0">${stat.stat.name}</label>
+          <div class="progress" title="${stat.base_stat}">
+            <div class="progress-bar animate__animated animate__fadeInLeft" id="${stat.stat.name}" role="progressbar" style="width:${value}%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
+              ${stat.base_stat}
             </div>
           </div>
         </div>`
@@ -136,7 +136,7 @@ const modalPokedex = async (pokemonName) => {
       const entries = textEntries[randomText].flavor_text;
       const version = textEntries[randomText].version.name;
       return ` 
-        <figure class="m-0">
+        <figure class="m-0 animate__animated animate__fadeIn">
           <blockquote class="blockquote mb-2">
             <p class=""> ${ entries } </p>
           </blockquote>
@@ -159,15 +159,38 @@ const modalPokedex = async (pokemonName) => {
         shortEffect = getEffect.short_effect; 
       });
       if (effect == undefined) effect = "No Description";
+      if (shortEffect == undefined) shortEffect = "No Description";
+
       return `
-        <ol class="list-group mb-2">
-          <li class="list-group-item p-0">
-            <div class="me-auto">
-              <h6 class="fw-bold text-capitalize">${ effectEntry.name }</h6>
-              ${ effect }
-            </div>
-          </li>
-        </ol>`
+        <div class="row"> 
+          <div class="col-md"> 
+            <ol class="list-group mb-2">
+              <li class="list-group-item p-0">
+                <div class="me-auto ">
+                  <nav class="navbar pt-0">
+                    <h6 class="fw-bold card-text"> Effect </h6>
+                  </nav>
+                  <h6 class="text-capitalize">${ effectEntry.name.replace(/-/g, " ") }</h6>
+                  ${ effect }
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div class="col-md">  
+            <ol class="list-group mb-2">
+              <li class="list-group-item p-0">
+                <div class="me-auto">
+                  <nav class="navbar pt-0">
+                    <h6 class="fw-bold card-text"> Short Effect </h6>
+                  </nav>
+                  <h6 class="text-capitalize">${ effectEntry.name.replace(/-/g, " ") }</h6>
+                  ${ shortEffect }
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        `
     }).join("")
 
     // modal Content
@@ -178,7 +201,7 @@ const modalPokedex = async (pokemonName) => {
         </div>
         <div class="modal-body px-0"> 
           <div class="container"> 
-            <div class="row gap-3">
+            <div class="row gap-2">
               <div class="column col-md">
                 ${ pokemon.card() }
               </div>
@@ -193,10 +216,10 @@ const modalPokedex = async (pokemonName) => {
                   </div>
                 </div>
               </div>
-              <div class="column col-xl">
+              <div class="column col-xl-6">
                 <div class="card"> 
                   <div class="card-header"> 
-                    <ul class="nav nav-tabs" id="myTab">
+                    <ul class="nav nav-tabs " id="myTab">
                       <li class="nav-item">
                         <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#pokemonProfile" type="button"> Profile </button>
                       </li>
@@ -244,7 +267,7 @@ const modalPokedex = async (pokemonName) => {
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
-    document.querySelector(".nav-tabs ").style.borderBottom = `1px solid ${ colorPokemon }`
+    // document.querySelector(".nav-tabs ").style.borderBottom = `1px solid ${ colorPokemon }`
     modalLoad.classList.add("d-none");
 
   } catch (error) {

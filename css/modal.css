@@ -31,7 +31,7 @@
 .progress {
   background: linear-gradient(var(--gray), var(--white)) ;
   font-size: 11px;
-  /* height: 15px; */
+  height: 15px;
 }
 .progress, .progress-bar {
   border-radius: 10px;
@@ -40,9 +40,11 @@
 
 /* nav-tabs */
 .blockquote, .modal-body .list-group li {
-  font-size: 1em;
+  font-size: 15px;
   text-transform: initial;
   text-align: justify;
+  text-overflow: ellipsis;
+
 }
 .nav-tabs .nav-link.active {
   background: var(--white);
@@ -60,12 +62,25 @@
 }
 .modal-body .list-group li {
   color: var(--darkgray) !important;
-  font-size: 15px;
-}
-
-@media screen and (max-width: 992px) {
   
-  .modal-body .container .row  {
+}
+.modal-body .column .card-body .tab-content {
+  font-size: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.modal-body .column .card-body .tab-content::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.modal-body .column .card-body .tab-content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+@media screen and (max-width: 1200px) {
+  
+  .modal-body .container > .row  {
     align-items: center;
   }
 
