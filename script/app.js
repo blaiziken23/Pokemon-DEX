@@ -162,7 +162,7 @@ const modalPokedex = async (pokemonName) => {
       if (shortEffect == undefined) shortEffect = "No Description";
 
       return `
-        <div class="row"> 
+        <div class="row "> 
           <div class="col-md"> 
             <ol class="list-group mb-2">
               <li class="list-group-item p-0">
@@ -170,7 +170,7 @@ const modalPokedex = async (pokemonName) => {
                   <nav class="navbar pt-0">
                     <h6 class="fw-bold card-text"> Effect </h6>
                   </nav>
-                  <h6 class="text-capitalize">${ i + 1 }. ${ effectEntry.name.replace(/-/g, " ") }</h6>
+                  <h6 class="text-capitalize"><span class="fw-bold">${ i + 1 }.</span> ${ effectEntry.name.replace(/-/g, " ") }</h6>
                   ${ effect }
                 </div>
               </li>
@@ -189,8 +189,7 @@ const modalPokedex = async (pokemonName) => {
               </li>
             </ol>
           </div>
-        </div> <hr class="my-2">
-        `
+        </div> <hr class="my-2"> `
     }).join("")
 
     // modal Content
