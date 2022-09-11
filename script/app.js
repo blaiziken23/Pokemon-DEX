@@ -170,7 +170,7 @@ const modalPokedex = async (pokemonName) => {
                   <nav class="navbar pt-0">
                     <h6 class="fw-bold card-text"> Effect </h6>
                   </nav>
-                  <h6 class="text-capitalize">${ effectEntry.name.replace(/-/g, " ") }</h6>
+                  <h6 class="text-capitalize">${ i + 1 }. ${ effectEntry.name.replace(/-/g, " ") }</h6>
                   ${ effect }
                 </div>
               </li>
@@ -189,7 +189,7 @@ const modalPokedex = async (pokemonName) => {
               </li>
             </ol>
           </div>
-        </div>
+        </div> <hr class="my-2">
         `
     }).join("")
 
