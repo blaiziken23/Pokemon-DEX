@@ -43,8 +43,6 @@
   font-size: 15px;
   text-transform: initial;
   text-align: justify;
-  text-overflow: ellipsis;
-
 }
 .nav-tabs .nav-link.active {
   background: var(--white);
@@ -69,6 +67,12 @@
   max-height: 400px;
   overflow-y: auto;
 }
+.modal-body .column .card-body .tab-content .tab-pane .damage-relation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .modal-body .column .card-body .tab-content::-webkit-scrollbar {
   display: none;
