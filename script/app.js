@@ -110,7 +110,7 @@ const modalPokedex = async (pokemonName) => {
         <div class="progress-div pb-2"> 
           <label for="${x.stat.name}" class="form-label m-0">${x.stat.name}</label>
           <div class="progress" title="${x.base_stat}">
-            <div class="progress-bar animate__animated animate__fadeInLeft" id="${x.stat.name}" role="progressbar" style="width:${value}%; background:${colorPokemon};">
+            <div class="progress-bar animate__animated animate__fadeInLeft" id="${x.stat.name}" role="progressbar" style="width:${value}%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
               ${x.base_stat}
             </div>
           </div>
@@ -154,7 +154,11 @@ const modalPokedex = async (pokemonName) => {
       console.log(effectEntry)
       let effect;
       let shortEffect;
-      effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getEffect => { effect = getEffect.effect; shortEffect = getEffect.short_effect; });
+      effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getEffect => { 
+        effect = getEffect.effect; 
+        shortEffect = getEffect.short_effect; 
+      });
+      if (effect == undefined) effect = "No Description";
       return `
         <ol class="list-group mb-2">
           <li class="list-group-item p-0">

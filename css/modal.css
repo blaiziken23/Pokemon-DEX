@@ -29,7 +29,9 @@
   content: "#";
 }
 .progress {
-  background: var(--gray);
+  background: linear-gradient(var(--gray), var(--white)) ;
+  font-size: 11px;
+  /* height: 15px; */
 }
 .progress, .progress-bar {
   border-radius: 10px;
@@ -63,6 +65,8 @@
 
 @media screen and (max-width: 992px) {
   
-
+  .modal-body .container .row  {
+    align-items: center;
+  }
 
 }
