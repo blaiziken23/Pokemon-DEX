@@ -15,6 +15,13 @@ const display = async (promise) => {
         })
       });
 
+      document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
+        pokemonType.addEventListener("click", async (e) => {
+          const typeInfo = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`)
+          console.log(typeInfo)
+        })
+      })
+
     }
     setTimeout(() => {
       loader.classList.add("d-none");

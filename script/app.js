@@ -369,7 +369,7 @@ const newPokemon = (promise, parentElement) => {
     promise.types.map(poke_type => {
       let bgColor = "";
       for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};"> ${poke_type.type.name} </li>`;
+      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
     }).join("")
   )
   parentElement.innerHTML += pokemon.card();
