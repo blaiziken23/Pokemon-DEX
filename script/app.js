@@ -16,11 +16,11 @@ class Pokemon {
   card() {
     return `
       <div class="card shadow-sm">
-        <img src="${this.pokemonImage}" class="card-img-top p-3 animate__animated animate__fadeInDown" alt="${this.pokemonName}">
+        <img src="${ this.pokemonImage }" class="card-img-top p-3 animate__animated animate__fadeInDown" alt="${ this.pokemonName }">
         <div class="card-body py-3 px-0 d-flex flex-column justify-content-center">
-          <h5 class="card-title text-center" data-bs-toggle="modal" data-bs-target="#modalInfo">${this.pokemonName}</h5>
-          <div class="card-text d-flex justify-content-center gap-1"> ${this.pokemonType} </div>
-          <div class="card-text id"> ${this.pokemonId}</div>
+          <h5 class="card-title text-center" data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
+          <div class="card-text d-flex justify-content-center gap-1"> ${ this.pokemonType } </div>
+          <div class="card-text id"> ${ this.pokemonId }</div>
         </div>
       </div> `
   }
@@ -105,14 +105,13 @@ const modalPokedex = async (pokemonName) => {
       const value = (stat.base_stat * 100) / 300;    /* maxValue = 300 */
       return `
         <div class="progress-div pb-2"> 
-          <label for="${stat.stat.name}" class="form-label m-0">${stat.stat.name}</label>
-          <div class="progress" title="${stat.base_stat}">
-            <div class="progress-bar animate__animated animate__fadeInLeft" id="${stat.stat.name}" role="progressbar" style="width:${value}%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
-              ${stat.base_stat}
+          <label for="${ stat.stat.name }" class="form-label m-0">${ stat.stat.name }</label>
+          <div class="progress" title="${ stat.base_stat }">
+            <div class="progress-bar animate__animated animate__fadeInLeft" id="${ stat.stat.name }" role="progressbar" style="width:${ value }%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
+              ${ stat.base_stat }
             </div>
           </div>
-        </div>
-        `
+        </div> `
     }).join("");
 
     // new pokemon card
@@ -159,37 +158,11 @@ const modalPokedex = async (pokemonName) => {
       if (effect == undefined || shortEffect == undefined) effect = shortEffect = "No Description";
 
       return `
-        <div class="row "> 
-          <div class="col-md"> 
-            <ol class="list-group mb-2">
-              <li class="list-group-item p-0">
-                <div class="me-auto ">
-                  <nav class="navbar pt-0">
-                    <h6 class="fw-bold card-text"> Effect </h6>
-                  </nav>
-                  <h6 class="text-capitalize"><span class="fw-bold">${ i + 1 } -</span> ${ effectEntry.name.replace(/-/g, " ") }</h6>
-                  ${ effect }
-                </div>
-              </li>
-            </ol>
-          </div>
-          <div class="col-md">  
-            <ol class="list-group mb-2">
-              <li class="list-group-item p-0">
-                <div class="me-auto">
-                  <nav class="navbar pt-0">
-                    <h6 class="fw-bold card-text"> Short Effect </h6>
-                  </nav>
-                  <h6 class="text-capitalize"><span class="fw-bold">${ i + 1.1 } -</span> ${ effectEntry.name.replace(/-/g, " ") }</h6>
-                  ${ shortEffect }
-                </div>
-              </li>
-            </ol>
-          </div>
-        </div> <hr class="my-2"> `
-    }).join("")
+        <h6 class="text-capitalize d-flex align-items-center"><span class="fw-bold">${ i + 1 } - </span> ${ effectEntry.name.replace(/-/g, " ") } </h6>
+        <p class="card-text">${ shortEffect }</p>`
+    }).join("");
 
-    // pokemon type
+    // pokemon type Damage Relations
     const type = pokemonInfo.types.map(type => api_fetch(type.type.url));
     const types = await Promise.all(type).then(types => { return types });
 
@@ -199,7 +172,6 @@ const modalPokedex = async (pokemonName) => {
     let halfDamageTo = new Set();
     let noDamageFrom = new Set();
     let noDamageTo = new Set();
-
     types.map(dmg => {
       dmg.damage_relations.double_damage_from.map(type => x2DamageFrom.add(type.name));
       dmg.damage_relations.double_damage_to.map(type =>  x2DamageTo.add(type.name));
@@ -207,21 +179,17 @@ const modalPokedex = async (pokemonName) => {
       dmg.damage_relations.half_damage_to.map(type => halfDamageTo.add(type.name));
       dmg.damage_relations.no_damage_from.map(type => noDamageFrom.add(type.name));
       dmg.damage_relations.no_damage_to.map(type => noDamageTo.add(type.name));
-    })
-    console.log(x2DamageFrom)
-    console.log(x2DamageTo)
+    });
     const dmgRelationsValues = (dmgRelations) => {
       const typeList = Array.from(dmgRelations).map(x => {
         let bgColor = "";
         for (const type in typeColor) { 
-          if (x == type) 
-          bgColor = typeColor[type]; 
+          if (x == type) bgColor = typeColor[type]; 
         }
         return `<li class="list-group-item" style="background-color:${ bgColor };"> ${ x } </li> `;
       }).join("");
       return typeList;
     }
-
     const pokemonDamageRelations = () => {
       return `
         <div class="row"> 
@@ -246,25 +214,6 @@ const modalPokedex = async (pokemonName) => {
         <div class="row"> 
           <div class="col-sm">
             <nav class="navbar">
-              <h6 class="card-text"> Half Damage from </h6>
-            </nav>
-              <div class="card-text damage-relation"> 
-                ${ dmgRelationsValues(halfDamageFrom) }
-              </div>
-            </div>
-          <div class="col-sm">
-            <nav class="navbar">
-              <h6 class="card-text"> Half Damage to </h6>
-            </nav>
-              <div class="card-text damage-relation"> 
-               ${ dmgRelationsValues(halfDamageTo) }
-              </div>
-            </div>
-        </div>
-        <hr class="my-2">
-        <div class="row"> 
-          <div class="col-sm">
-            <nav class="navbar">
               <h6 class="card-text"> no Damage from </h6>
             </nav>
               <div class="card-text damage-relation"> 
@@ -283,8 +232,6 @@ const modalPokedex = async (pokemonName) => {
         <hr class="my-2"> `
     }
     
-
-
 
     // modal Content
     modalDialog.innerHTML = `
@@ -342,7 +289,14 @@ const modalPokedex = async (pokemonName) => {
                           <nav class="navbar pt-0">
                             <h5 class="card-text"> Pokemon Ability </h5>
                           </nav>
-                          ${ effectEntries }
+                          <ol class="list-group">
+                            <li class="list-group-item p-0">
+                              <div class="me-auto">
+                                ${ effectEntries }
+                              </div>
+                            </li>
+                          </ol>
+                          <hr class="my-2"> 
                         </div>
                       </div>
                       <div class="tab-pane fade " id="pokemonDamage">
@@ -374,6 +328,7 @@ const modalPokedex = async (pokemonName) => {
   } catch (error) {
     alert("Please Try Again!!!");
     // window.location = "index.html";
+    modalLoad.classList.add("d-none");
     console.log(error);
   }
 }
@@ -387,7 +342,7 @@ const display = async (promise) => {
       newPokemon(promise);
 
       document.querySelectorAll(".card-title").forEach(pokemonName => {
-        pokemonName.addEventListener("click", async (e) => {
+        pokemonName.addEventListener("click", (e) => {
           modalPokedex(e.target.textContent);
         });
       });
@@ -403,7 +358,7 @@ const display = async (promise) => {
   }
 }
 
-// create funtiopn instanciate Pokemon class
+// create function instanciate Pokemon class
 
 const newPokemon = (promise, parentElement) => {
 
@@ -414,7 +369,7 @@ const newPokemon = (promise, parentElement) => {
     promise.types.map(poke_type => {
       let bgColor = "";
       for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item" style="background-color:${bgColor};"> ${poke_type.type.name} </li>`;
+      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};"> ${poke_type.type.name} </li>`;
     }).join("")
   )
   parentElement.innerHTML += pokemon.card();
@@ -423,3 +378,41 @@ const newPokemon = (promise, parentElement) => {
 
 
 export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, display, newPokemon }
+
+
+
+
+
+/* <div class="col-md"> 
+  <ol class="list-group mb-2">
+    <li class="list-group-item p-0">
+      <div class="me-auto ">
+        <nav class="navbar pt-0">
+          <h6 class="fw-bold card-text"> Effect </h6>
+        </nav>
+        <h6 class="text-capitalize"><span class="fw-bold">${ i + 1 } -</span> ${ effectEntry.name.replace(/-/g, " ") }</h6>
+        ${ effect }
+      </div>
+    </li>
+  </ol>
+</div> */
+
+/* <hr class="my-2">
+<div class="row"> 
+  <div class="col-sm">
+    <nav class="navbar">
+      <h6 class="card-text"> Half Damage from </h6>
+    </nav>
+      <div class="card-text damage-relation"> 
+        ${ dmgRelationsValues(halfDamageFrom) }
+      </div>
+    </div>
+  <div class="col-sm">
+    <nav class="navbar">
+      <h6 class="card-text"> Half Damage to </h6>
+    </nav>
+      <div class="card-text damage-relation"> 
+        ${ dmgRelationsValues(halfDamageTo) }
+      </div>
+    </div>
+</div> */
