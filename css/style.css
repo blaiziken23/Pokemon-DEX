@@ -4,6 +4,7 @@
   --dark: #263238;
   --darkgray: #607D8B;
   --gray: #ECEFF1;
+  --gray50: rgb(236 239 241 / 50%);
 }
 * {
   margin: 0;

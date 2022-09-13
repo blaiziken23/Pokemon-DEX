@@ -46,8 +46,9 @@
 }
 .nav-tabs .nav-link.active {
   background: var(--white);
-  border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--gray50);
   color: var(--dark) !important;
+  background: var(--gray50);
 }
 .nav-tabs .nav-item .nav-link {
   color: var(--darkgray);
@@ -60,12 +61,16 @@
 }
 .modal-body .list-group li {
   color: var(--darkgray) !important;
-  
+  /* background: var(--gray50); */
+  background: inherit;
 }
 .modal-body .column .card-body .tab-content {
   font-size: 15px;
   max-height: 400px;
   overflow-y: auto;
+  background: var(--gray50);
+  padding: 0 10px 10px;
+  border-radius: 0 0 10px 10px;
 }
 .modal-body .column .card-body .tab-content .tab-pane .damage-relation {
   display: flex;

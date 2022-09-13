@@ -83,14 +83,15 @@ const modalPokedex = async (pokemonName) => {
     const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`);
     const species = await api_fetch(pokemonInfo.species.url);
     let evolution;
-    if(species.evolution_chain != null) { 
+    if (species.evolution_chain != null) { 
       evolution = await api_fetch(species.evolution_chain.url); 
       // console.log("Evolution", evolution); 
     }
-
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
-    const varieties = Promise.all(varity).then(x => { return x });
+    const varieties = await Promise.all(varity).then(x => { return x });
 
+    console.log(species)
+    console.log(pokemonInfo)
     // const promises = await Promise.all([varieties, abilities, types]);
     // console.log(promises)
    
@@ -156,10 +157,10 @@ const modalPokedex = async (pokemonName) => {
         shortEffect = getEffect.short_effect; 
       });
       if (effect == undefined || shortEffect == undefined) effect = shortEffect = "No Description";
-
       return `
         <h6 class="text-capitalize d-flex align-items-center"><span class="fw-bold">${ i + 1 } - </span> ${ effectEntry.name.replace(/-/g, " ") } </h6>
-        <p class="card-text">${ shortEffect }</p>`
+        <p class="card-text">${ shortEffect }</p> 
+        <hr class="my-2"> `
     }).join("");
 
     // pokemon type Damage Relations
@@ -232,6 +233,20 @@ const modalPokedex = async (pokemonName) => {
         <hr class="my-2"> `
     }
     
+    // pokemon Height
+    const decimetresTometres = pokemonInfo.height / 10;
+    
+    const metres = decimetresTometres;
+    const inch = metres / 0.0254;
+    const ft = Math.floor(inch / 12);
+    const d_inch = Math.round(inch - (12 * ft));
+    const length = `${ ft }' ${ d_inch.toString().padStart(2, 0) }"`;
+
+    // pokemon habitat
+    const habitat = species.habitat;
+    let habitatName;
+    habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
+
 
     // modal Content
     modalDialog.innerHTML = `
@@ -272,6 +287,7 @@ const modalPokedex = async (pokemonName) => {
                   </div>
                   <div class="card-body"> 
                     <div class="tab-content">
+
                       <div class="tab-pane fade show active" id="pokemonProfile">
                         <nav class="navbar">
                           <h5 class="card-text m-0"> Pokemon Entries </h5>
@@ -285,20 +301,65 @@ const modalPokedex = async (pokemonName) => {
                         <div class="card-text random-entries">
                           ${ await randomEntries() }
                         </div>
-                        <div class="card-text">
-                          <nav class="navbar pt-0">
-                            <h5 class="card-text"> Pokemon Ability </h5>
-                          </nav>
-                          <ol class="list-group">
-                            <li class="list-group-item p-0">
-                              <div class="me-auto">
-                                ${ effectEntries }
+                        <div class="row">   
+                          <div class="col-sm"> 
+                            <div class="card-text">
+                              <nav class="navbar pt-0">
+                                <h5 class="card-text"> Ability </h5>
+                              </nav>
+                              <ol class="list-group">
+                                <li class="list-group-item p-0">
+                                  <div class="me-auto">
+                                    ${ effectEntries }
+                                  </div>
+                                </li>
+                              </ol>
+                            </div>
+                          </div>
+                          <div class="col-sm"> 
+                            <div class="row"> 
+                              <div class="col"> 
+                                <div class="card-text">
+                                  <nav class="navbar pt-0">
+                                    <h5 class="card-text"> Height </h5>
+                                  </nav>
+                                  <p class="card-text"> ${ length } </p>
+                                </div>
                               </div>
-                            </li>
-                          </ol>
-                          <hr class="my-2"> 
+                              <div class="col"> 
+                                <div class="card-text">
+                                  <nav class="navbar pt-0">
+                                    <h5 class="card-text"> Weight </h5>
+                                  </nav>
+                                  <p class="card-text"> ${ ((pokemonInfo.weight / 10) * 2.205).toFixed(1) } pound </p>
+                                </div>
+                              </div>
+                            </div>
+                            <hr class="my-2"> 
+                            <div class="row"> 
+                              <div class="col">  
+                                <div class="card-text">
+                                  <nav class="navbar pt-0">
+                                    <h5 class="card-text"> Egg groups </h5>
+                                  </nav>
+                                  <p class="card-text"> ${ species.egg_groups.map(name => ` ${name.name}`) } </p>
+                                </div>
+                              </div>
+                              <div class="col"> 
+                                <div class="card-text">
+                                  <nav class="navbar pt-0">
+                                    <h5 class="card-text"> habitat </h5>
+                                  </nav>
+                                  <p class="card-text"> ${ habitatName } </p>
+                                </div>
+                              </div>
+                            
+                            </div>
+                            
+                          </div>
                         </div>
                       </div>
+                      
                       <div class="tab-pane fade " id="pokemonDamage">
                         <nav class="navbar">   
                           <h5 class="card-text m-0"> Pokemon Damage Relations </h5>
