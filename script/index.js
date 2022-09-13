@@ -100,3 +100,10 @@ document.querySelector("#search-pokemon").addEventListener("click", async (e) =>
   document.querySelector("#input-search").value = "";
 
 })
+
+
+// window scroll
+const header = document.querySelector("header");
+window.addEventListener("scroll", () => {
+  window.scrollY == 0 ? header.classList.remove("shadow-sm") : header.classList.add("shadow-sm");
+});
