@@ -9,6 +9,9 @@
 .modal-body .column .card {
   box-shadow: none !important;
 }
+.modal-body .column .card img {
+  padding: 0 !important;
+}
 .modal-body .column .card, .card-header {
   background: none;
 }
@@ -46,9 +49,9 @@
 }
 .nav-tabs .nav-link.active {
   background: var(--white);
-  border-bottom: 1px solid var(--gray50);
+  border-bottom: 1px solid var(--gray);
   color: var(--dark) !important;
-  background: var(--gray50);
+  background: var(--gray);
 }
 .nav-tabs .nav-item .nav-link {
   color: var(--darkgray);
@@ -61,15 +64,14 @@
 }
 .modal-body .list-group li {
   color: var(--darkgray) !important;
-  /* background: var(--gray50); */
   background: inherit;
 }
 .modal-body .column .card-body .tab-content {
   font-size: 15px;
-  max-height: 400px;
+  max-height: 350px;
   overflow-y: auto;
-  background: var(--gray50);
-  padding: 0 10px 10px;
+  background: var(--gray);
+  padding: 0 15px 15px;
   border-radius: 0 0 10px 10px;
 }
 .modal-body .column .card-body .tab-content .tab-pane .damage-relation {
@@ -77,7 +79,9 @@
   flex-wrap: wrap;
   gap: 5px;
 }
-
+.modal-body .column .card-body .tab-content .tab-pane .navbar h6 {
+  color: var(--dark);
+}
 /* Hide scrollbar for Chrome, Safari and Opera */
 .modal-body .column .card-body .tab-content::-webkit-scrollbar {
   display: none;

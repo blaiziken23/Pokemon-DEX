@@ -1,4 +1,4 @@
-import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon } from "./app.js";
+import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, modalDialogTypeList, newPokemon } from "./app.js";
 
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");
@@ -11,14 +11,13 @@ const display = async (promise) => {
 
       document.querySelectorAll(".card-title").forEach(pokemonName => {
         pokemonName.addEventListener("click", async (e) => {
-          modalPokedex(e.target.textContent)
+          modalPokedex(e.target.textContent);
         })
       });
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
         pokemonType.addEventListener("click", async (e) => {
-          const typeInfo = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`)
-          console.log(typeInfo)
+          modalDialogTypeList(e.target.textContent);
         })
       })
 
@@ -35,7 +34,6 @@ const display = async (promise) => {
 
 let prev = null; 
 let next = null;
-
 const showData = async (url) => {
   loader.classList.remove("d-none");
   const link = await api_fetch(url);
@@ -59,7 +57,6 @@ const nextBtn = async () => (next != null) ? await showData(next) : alert("Highe
 const prevBtn = async () => (prev != null) ? await showData(prev) : alert("Lowest ID");
 document.querySelector("#prev").addEventListener("click", prevBtn);
 document.querySelector("#next").addEventListener("click", nextBtn);
-
 showData(`https://pokeapi.co/api/v2/pokemon`);
 
 // Random
@@ -90,7 +87,6 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
   document.querySelector("#input-search").value = "";
 });
 
-
 // Search
 document.querySelector("#search-pokemon").addEventListener("click", async (e) => {
   e.preventDefault();
@@ -100,7 +96,6 @@ document.querySelector("#search-pokemon").addEventListener("click", async (e) =>
   document.querySelector("#input-search").value = "";
 
 })
-
 
 // window scroll
 const header = document.querySelector("header");

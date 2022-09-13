@@ -28,7 +28,7 @@ main {
 @keyframes bounce { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
 .pokemon-cards .card-body .card-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   text-underline-offset: 3px;
@@ -38,7 +38,11 @@ main {
 }
 .pokemon-cards .card-body li {
   font-weight: normal;
-  font-size: 12px;
+  font-size: 13px;
+}
+.pokemon-cards .card-body li:hover {
+  cursor: pointer;
+  text-decoration: underline solid 1.5px;
 }
 .id {
   position: absolute;
@@ -48,5 +52,5 @@ main {
   color: var(--white);
   font-size: 12.5px;
   padding: 2px 7px;
-  border-radius: 0 5px;
+  border-radius: 0 3px;
 }

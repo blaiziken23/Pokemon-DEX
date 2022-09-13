@@ -158,7 +158,7 @@ const modalPokedex = async (pokemonName) => {
       });
       if (effect == undefined || shortEffect == undefined) effect = shortEffect = "No Description";
       return `
-        <h6 class="text-capitalize d-flex align-items-center"><span class="fw-bold">${ i + 1 } - </span> ${ effectEntry.name.replace(/-/g, " ") } </h6>
+        <h6 class="text-capitalize"><span> ${ i + 1 } </span> - ${ effectEntry.name.replace(/-/g, " ") } </h6>
         <p class="card-text">${ shortEffect }</p> `
     }).join("");
 
@@ -195,7 +195,7 @@ const modalPokedex = async (pokemonName) => {
         <div class="row"> 
           <div class="col-sm">
             <nav class="navbar">
-              <h6 class="card-text"> x2 Damage from </h6>
+              <h6 class="card-text"> double Damage from </h6>
             </nav>
             <div class="card-text damage-relation"> 
               ${ dmgRelationsValues(x2DamageFrom) }
@@ -203,7 +203,7 @@ const modalPokedex = async (pokemonName) => {
           </div>
           <div class="col-sm">
             <nav class="navbar">
-              <h6 class="card-text"> x2 Damage to </h6>
+              <h6 class="card-text"> double Damage to </h6>
             </nav>
             <div class="card-text damage-relation"> 
               ${ dmgRelationsValues(x2DamageTo) }
@@ -228,8 +228,7 @@ const modalPokedex = async (pokemonName) => {
                 ${ dmgRelationsValues(noDamageTo) }
               </div>
             </div>
-        </div> 
-        <hr class="my-2"> `
+        </div> `
     }
     
     // pokemon Height
@@ -246,11 +245,10 @@ const modalPokedex = async (pokemonName) => {
     let habitatName;
     habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
 
-
     // modal Content
     modalDialog.innerHTML = `
       <div class="modal-content">
-        <div class="modal-header shadow-sm" style="background:${ colorPokemon }">
+        <div class="modal-header" style="background:${ colorPokemon }">
           <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body px-0"> 
@@ -289,7 +287,7 @@ const modalPokedex = async (pokemonName) => {
 
                       <div class="tab-pane fade show active" id="pokemonProfile">
                         <nav class="navbar">
-                          <h5 class="card-text m-0"> Pokemon Entries </h5>
+                          <h6 class="card-text m-0"> Pokemon Entries </h6>
                             <button type="button" class="btn" id="random-entries-btn">
                               <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-shuffle" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.556 8a9.624 9.624 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.595 10.595 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.624 9.624 0 0 0 6.444 8a9.624 9.624 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5z"/>
@@ -304,14 +302,13 @@ const modalPokedex = async (pokemonName) => {
                           <div class="col-sm"> 
                             <div class="card-text">
                               <nav class="navbar pt-0">
-                                <h5 class="card-text"> Ability </h5>
+                                <h6 class="card-text"> Ability </h6>
                               </nav>
                               <ol class="list-group">
                                 <li class="list-group-item p-0">
-                                  <div class="me-auto">
-                                    ${ effectEntries }
-                                  </div>
+                                  ${ effectEntries }
                                 </li>
+                                <hr class="my-2"> 
                               </ol>
                             </div>
                           </div>
@@ -320,7 +317,7 @@ const modalPokedex = async (pokemonName) => {
                               <div class="col"> 
                                 <div class="card-text">
                                   <nav class="navbar pt-0">
-                                    <h5 class="card-text"> Height </h5>
+                                    <h6 class="card-text"> Height </h6>
                                   </nav>
                                   <p class="card-text"> ${ length } </p>
                                 </div>
@@ -328,7 +325,7 @@ const modalPokedex = async (pokemonName) => {
                               <div class="col"> 
                                 <div class="card-text">
                                   <nav class="navbar pt-0">
-                                    <h5 class="card-text"> Weight </h5>
+                                    <h6 class="card-text"> Weight </h6>
                                   </nav>
                                   <p class="card-text"> ${ ((pokemonInfo.weight / 10) * 2.205).toFixed(1) } pound </p>
                                 </div>
@@ -339,30 +336,24 @@ const modalPokedex = async (pokemonName) => {
                               <div class="col">  
                                 <div class="card-text">
                                   <nav class="navbar pt-0">
-                                    <h5 class="card-text"> Egg groups </h5>
+                                    <h6 class="card-text"> Egg groups </h6>
                                   </nav>
-                                  <p class="card-text"> ${ species.egg_groups.map(name => ` ${name.name}`) } </p>
+                                  <p class="card-text"> ${ species.egg_groups.map(name => ` ${ name.name }`) } </p>
                                 </div>
                               </div>
                               <div class="col"> 
                                 <div class="card-text">
                                   <nav class="navbar pt-0">
-                                    <h5 class="card-text"> habitat </h5>
+                                    <h6 class="card-text"> habitat </h6>
                                   </nav>
                                   <p class="card-text"> ${ habitatName } </p>
                                 </div>
                               </div>
-                            
                             </div>
-                            
                           </div>
                         </div>
                       </div>
-                      
                       <div class="tab-pane fade " id="pokemonDamage">
-                        <nav class="navbar">   
-                          <h5 class="card-text m-0"> Pokemon Damage Relations </h5>
-                        </nav>
                         <div class="card-text">
                           ${ pokemonDamageRelations() }
                         </div>
@@ -376,13 +367,11 @@ const modalPokedex = async (pokemonName) => {
           </div> 
         </div>
       </div> `
- 
     document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = "" });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
-    // document.querySelector(".nav-tabs ").style.borderBottom = `1px solid ${ colorPokemon }`
     modalLoad.classList.add("d-none");
 
   } catch (error) {
@@ -392,6 +381,27 @@ const modalPokedex = async (pokemonName) => {
     console.log(error);
   }
 }
+
+// modalDialog type list
+const modal_dialog_type = document.querySelector(".modalDialogTypeList");
+const modalDialogTypeList = async (pokemonType) => {
+
+  const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ pokemonType }`);
+  console.log(type)
+
+  modal_dialog_type.innerHTML = `
+    <div class="modal-content">
+      <div class="modal-header" style="background:">
+        <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body"> 
+        hello world
+      </div>
+    </div> `
+
+
+}
+
 
 // display Card
 const loader = document.querySelector(".loader");
@@ -429,7 +439,7 @@ const newPokemon = (promise, parentElement) => {
     promise.types.map(poke_type => {
       let bgColor = "";
       for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+      return `<li class="list-group-item pokemon-type" data-bs-toggle="modal" data-bs-target="#modalInfo" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
     }).join("")
   )
   parentElement.innerHTML += pokemon.card();
@@ -437,7 +447,7 @@ const newPokemon = (promise, parentElement) => {
 
 
 
-export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, display, newPokemon }
+export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, modalDialogTypeList, display, newPokemon }
 
 
 
