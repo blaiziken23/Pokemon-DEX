@@ -159,8 +159,7 @@ const modalPokedex = async (pokemonName) => {
       if (effect == undefined || shortEffect == undefined) effect = shortEffect = "No Description";
       return `
         <h6 class="text-capitalize d-flex align-items-center"><span class="fw-bold">${ i + 1 } - </span> ${ effectEntry.name.replace(/-/g, " ") } </h6>
-        <p class="card-text">${ shortEffect }</p> 
-        <hr class="my-2"> `
+        <p class="card-text">${ shortEffect }</p> `
     }).join("");
 
     // pokemon type Damage Relations
