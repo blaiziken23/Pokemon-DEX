@@ -28,7 +28,8 @@ const display = async (promise) => {
 
           pokemonList.map(x => { list.push(api_fetch(x.pokemon.url)) });
           await Promise.all(list).then(pokemon => {
-            console.log(pokemon)
+            // console.log(pokemon.length)
+            // const slot1 = pokemon.map(slot1 => slot1.types)
             title.innerHTML = `${ pokemon.length } Pokémon with ${ e.target.textContent } type`;
             removeChild(pokemonCards);
             display(pokemon);
@@ -43,6 +44,8 @@ const display = async (promise) => {
             document.body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           });
+
+      
         });
       });
 

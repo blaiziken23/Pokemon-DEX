@@ -82,18 +82,11 @@ const modalPokedex = async (pokemonName) => {
     modalLoad.classList.remove("d-none");
     const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`);
     const species = await api_fetch(pokemonInfo.species.url);
-    let evolution;
-    if (species.evolution_chain != null) { 
-      evolution = await api_fetch(species.evolution_chain.url); 
-      // console.log("Evolution", evolution); 
-    }
+
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
     const varieties = await Promise.all(varity).then(x => { return x });
-
-    console.log(species)
-    console.log(pokemonInfo)
-    // const promises = await Promise.all([varieties, abilities, types]);
-    // console.log(promises)
+    // console.log(species)
+    // console.log(pokemonInfo)
    
     // pokemonColor 
     let colorPokemon;
@@ -245,6 +238,37 @@ const modalPokedex = async (pokemonName) => {
     let habitatName;
     habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
 
+    // evolution chain
+    let evolution;
+    if (species.evolution_chain != null) { 
+      evolution = await api_fetch(species.evolution_chain.url); 
+      const chain = evolution.chain;
+      const chain1 = chain.species;
+      const chain2 = chain.evolves_to.map(x => x).map(y => y.species);
+      let chain3;
+      const checkChain3 = chain.evolves_to.map(x => x.evolves_to)
+      let evolutionChain = [];
+
+      if(chain2.length === 0) {
+        console.log("Chain 1:", chain1);
+        console.log("The Pokemon Does not evolve");
+      }
+      else {
+        if (checkChain3[0].length === 0) {
+          console.log("Chain 1:", chain1);
+          console.log("Chain 2:", chain2)
+          console.log("2 evolve")
+        }
+        else {
+          console.log("Chain 1:", chain1)
+          console.log("Chain 2:", chain2)
+          chain3 = checkChain3[0].map(x => x.species)
+          console.log("Chain 3:", chain3)
+        }
+      }
+      console.log(chain); 
+    }
+
     // modal Content
     modalDialog.innerHTML = `
       <div class="modal-content">
@@ -362,8 +386,18 @@ const modalPokedex = async (pokemonName) => {
                   </div>
                 </card>
               </div>
-
             </div>
+
+            <div class="row">
+              <div class="col"> 
+                <div class="card">
+                  <div class="card-header py-0"> 
+                    <h5 class="card-text"> Pokémon Evolution Chain </h5>
+                  </div>
+                <div>
+              </div>
+            </div>
+
           </div> 
         </div>
       </div> `
