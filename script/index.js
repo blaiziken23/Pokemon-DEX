@@ -1,4 +1,4 @@
-import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, modalDialogTypeList, newPokemon } from "./app.js";
+import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon } from "./app.js";
 
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");
@@ -17,7 +17,21 @@ const display = async (promise) => {
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
         pokemonType.addEventListener("click", async (e) => {
-          modalDialogTypeList(e.target.textContent);
+
+          loader.classList.remove("d-none");
+          const title = document.querySelector(".container-title");
+          const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
+          const pokemonList = type.pokemon;
+          let list = [];
+          pokemonList.map(x => { list.push(api_fetch(x.pokemon.url)) });
+          await Promise.all(list).then(pokemon => {
+            console.log(pokemon)
+            title.innerHTML = `${ pokemon.length } Pokémon with ${ e.target.textContent } type`
+            removeChild(pokemonCards);
+            display(pokemon)
+            document.title = `${ e.target.textContent } Pokémon`;
+          })
+
         })
       })
 
@@ -71,17 +85,13 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
       const url = data.results[randomPokemon].url;
       randomData.push(api_fetch(url));
     }
-
+    // console.log(await Promise.all(randomData))
     setTimeout(async () => {
       removeChild(pokemonCards);
       display(await Promise.all(randomData));
     }, 100);
 
   } catch (error) {
-    alert("Please Try Again!!!");
-    setTimeout(() => {
-      loader.classList.add("d-none");
-    }, 100);
     console.log(error);
   }
   document.querySelector("#input-search").value = "";

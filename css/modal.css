@@ -70,7 +70,8 @@
   font-size: 15px;
   max-height: 350px;
   overflow-y: auto;
-  background: var(--gray);
+  /* background: var(--gray); */
+  background: linear-gradient(var(--gray), var(--white));
   padding: 0 15px 15px;
   border-radius: 0 0 10px 10px;
 }

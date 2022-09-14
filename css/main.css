@@ -5,29 +5,29 @@ main {
   border-left: 5px solid var(--darkgray);
   padding: 0 5px;
 }
-.pokemon-cards {
+.pokemon-cards, .pokemon-cards-tyle-list {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
-.pokemon-cards .card {
+.pokemon-cards .card, .pokemon-cards-tyle-list .card {
   width: 160px;
   overflow: hidden;
   height: 250px;
 }
-.pokemon-cards .card .card-body {
+.pokemon-cards .card .card-body, .pokemon-cards-tyle-list .card .card-body {
   background: var(--gray);
 }
-.pokemon-cards .card:hover {
+.pokemon-cards .card:hover, .pokemon-cards-tyle-list .card:hover {
   transition: var(--transition);
   animation: bounce linear .2s;
   box-shadow: 0px 0px 3px rgb(38 50 56 / 43%);
 }
 @keyframes bounce { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
-.pokemon-cards .card-body .card-title {
+.pokemon-cards .card-body .card-title, .pokemon-cards-tyle-list .card .card-body .card-title {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -36,7 +36,7 @@ main {
 .pokemon-cards .card:hover .card-title {
   text-decoration: underline solid var(--darkgray) 2px;
 }
-.pokemon-cards .card-body li {
+.pokemon-cards .card-body li, .pokemon-cards-tyle-list .card .card-body li {
   font-weight: normal;
   font-size: 13px;
 }

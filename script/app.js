@@ -75,7 +75,7 @@ const removeChild = (parent) => {
 
 // Modal Pokedex -------------------------------------------------------------
 const modalLoad = document.querySelector(".modalLoad");
-const modalDialog = document.querySelector(".modal-dialog");
+const modalDialog = document.querySelector(".modalDialogInfo");
 
 const modalPokedex = async (pokemonName) => {
   try {
@@ -367,12 +367,13 @@ const modalPokedex = async (pokemonName) => {
           </div> 
         </div>
       </div> `
-    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = "" });
+    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = ""; document.title = "Pokemon"; });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
     modalLoad.classList.add("d-none");
+    document.title = `${ pokemonInfo.name } | Pokemon`;
 
   } catch (error) {
     alert("Please Try Again!!!");
@@ -382,54 +383,7 @@ const modalPokedex = async (pokemonName) => {
   }
 }
 
-// modalDialog type list
-const modal_dialog_type = document.querySelector(".modalDialogTypeList");
-const modalDialogTypeList = async (pokemonType) => {
-
-  const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ pokemonType }`);
-  console.log(type)
-
-  modal_dialog_type.innerHTML = `
-    <div class="modal-content">
-      <div class="modal-header" style="background:">
-        <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body"> 
-        hello world
-      </div>
-    </div> `
-
-
-}
-
-
-// display Card
-const loader = document.querySelector(".loader");
-const display = async (promise) => {
-  try {
-    for (let i = 0; i < promise.length; i++) {
-
-      newPokemon(promise);
-
-      document.querySelectorAll(".card-title").forEach(pokemonName => {
-        pokemonName.addEventListener("click", (e) => {
-          modalPokedex(e.target.textContent);
-        });
-      });
-
-    }
-    setTimeout(() => {
-      loader.classList.add("d-none");
-    });
-    document.querySelector("#next-prev-btn").classList.remove("d-none");
-    
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 // create function instanciate Pokemon class
-
 const newPokemon = (promise, parentElement) => {
 
   const pokemon = new Pokemon(
@@ -439,18 +393,41 @@ const newPokemon = (promise, parentElement) => {
     promise.types.map(poke_type => {
       let bgColor = "";
       for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item pokemon-type" data-bs-toggle="modal" data-bs-target="#modalInfo" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
     }).join("")
   )
   parentElement.innerHTML += pokemon.card();
 }
 
 
-
-export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, modalDialogTypeList, display, newPokemon }
-
+export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon }
 
 
+
+// display Card
+// const loader = document.querySelector(".loader");
+// const display = async (promise) => {
+//   try {
+//     for (let i = 0; i < promise.length; i++) {
+
+//       newPokemon(promise);
+
+//       document.querySelectorAll(".card-title").forEach(pokemonName => {
+//         pokemonName.addEventListener("click", (e) => {
+//           modalPokedex(e.target.textContent);
+//         });
+//       });
+
+//     }
+//     setTimeout(() => {
+//       loader.classList.add("d-none");
+//     });
+//     document.querySelector("#next-prev-btn").classList.remove("d-none");
+    
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 
 /* <div class="col-md"> 
