@@ -17,23 +17,34 @@ const display = async (promise) => {
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
         pokemonType.addEventListener("click", async (e) => {
-
           loader.classList.remove("d-none");
+
           const title = document.querySelector(".container-title");
+          const header = document.querySelector("header");
+
           const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
           const pokemonList = type.pokemon;
           let list = [];
+
           pokemonList.map(x => { list.push(api_fetch(x.pokemon.url)) });
           await Promise.all(list).then(pokemon => {
             console.log(pokemon)
-            title.innerHTML = `${ pokemon.length } Pokémon with ${ e.target.textContent } type`
+            title.innerHTML = `${ pokemon.length } Pokémon with ${ e.target.textContent } type`;
             removeChild(pokemonCards);
-            display(pokemon)
-            document.title = `${ e.target.textContent } Pokémon`;
-          })
+            display(pokemon);
 
-        })
-      })
+            for (const type in typeColor) { 
+              if (e.target.textContent == type) header.style.background = ` ${ typeColor[type] } `; 
+            }
+
+            document.title = `${ e.target.textContent } Pokémon`;
+            document.querySelector("#next-prev-btn").classList.add("d-none");
+
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+          });
+        });
+      });
 
     }
     setTimeout(() => {
@@ -95,6 +106,8 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
     console.log(error);
   }
   document.querySelector("#input-search").value = "";
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 });
 
 // Search
