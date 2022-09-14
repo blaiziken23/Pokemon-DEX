@@ -2,6 +2,7 @@ import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, moda
 
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");
+const title = document.querySelector(".container-title");
 
 const display = async (promise) => {
   try {
@@ -19,7 +20,6 @@ const display = async (promise) => {
         pokemonType.addEventListener("click", async (e) => {
           loader.classList.remove("d-none");
 
-          const title = document.querySelector(".container-title");
           const header = document.querySelector("header");
 
           const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
@@ -100,6 +100,7 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
     setTimeout(async () => {
       removeChild(pokemonCards);
       display(await Promise.all(randomData));
+      title.innerHTML = "Random Pokémon";
     }, 100);
 
   } catch (error) {

@@ -33,7 +33,7 @@ main {
   cursor: pointer;
   text-underline-offset: 3px;
 }
-.pokemon-cards .card:hover .card-title {
+.pokemon-cards .card .card-title:hover{
   text-decoration: underline solid var(--darkgray) 2px;
 }
 .pokemon-cards .card-body li, .pokemon-cards-tyle-list .card .card-body li {
