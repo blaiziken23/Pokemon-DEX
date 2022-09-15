@@ -16,7 +16,7 @@ class Pokemon {
   card() {
     return `
       <div class="card shadow-sm">
-        <img src="${ this.pokemonImage }" class="card-img-top p-3 animate__animated animate__fadeInDown" alt="${ this.pokemonName }">
+        <img src="${ this.pokemonImage }" class="card-img-top p-3" alt="${ this.pokemonName }">
         <div class="card-body py-3 px-0 d-flex flex-column justify-content-center">
           <h5 class="card-title text-center" data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
           <div class="card-text d-flex justify-content-center gap-1"> ${ this.pokemonType } </div>

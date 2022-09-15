@@ -13,7 +13,7 @@ const display = async (promise) => {
       newPokemon(promise[i], pokemonCards);
 
       document.querySelectorAll(".card-title").forEach(pokemonName => {
-        pokemonName.addEventListener("click", async (e) => {
+        pokemonName.addEventListener("click", (e) => {
           modalPokedex(e.target.textContent);
         });
       });
@@ -33,14 +33,11 @@ const display = async (promise) => {
             title.innerHTML = `${ pokemon.length } ${ e.target.textContent } Pokémon type`;
             removeChild(pokemonCards);
             display(pokemon);
-
             for (const type in typeColor) { 
               if (e.target.textContent == type) header.style.background = ` ${ typeColor[type] } `; 
             }
-
             document.title = `${ e.target.textContent } Pokémon`;
             document.querySelector("#next-prev-btn").classList.add("d-none");
-
             document.body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           });
