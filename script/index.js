@@ -6,6 +6,8 @@ const title = document.querySelector(".container-title");
 
 const display = async (promise) => {
   try {
+    const start = Date.now()
+
     for (let i = 0; i < promise.length; i++) {
       
       newPokemon(promise[i], pokemonCards);
@@ -13,10 +15,11 @@ const display = async (promise) => {
       document.querySelectorAll(".card-title").forEach(pokemonName => {
         pokemonName.addEventListener("click", async (e) => {
           modalPokedex(e.target.textContent);
-        })
+        });
       });
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
+
         pokemonType.addEventListener("click", async (e) => {
           loader.classList.remove("d-none");
 
@@ -28,9 +31,8 @@ const display = async (promise) => {
 
           pokemonList.map(x => { list.push(api_fetch(x.pokemon.url)) });
           await Promise.all(list).then(pokemon => {
-            // console.log(pokemon.length)
-            // const slot1 = pokemon.map(slot1 => slot1.types)
-            title.innerHTML = `${ pokemon.length } Pokémon with ${ e.target.textContent } type`;
+          
+            title.innerHTML = `${ pokemon.length } ${ e.target.textContent } Pokémon type`;
             removeChild(pokemonCards);
             display(pokemon);
 
@@ -44,17 +46,15 @@ const display = async (promise) => {
             document.body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           });
-
-      
         });
       });
-
     }
+    const stop = Date.now()
+    console.log(`Time Taken to execute = ${(stop - start)/1000} seconds`);
     setTimeout(() => {
       loader.classList.add("d-none");
     });
     document.querySelector("#next-prev-btn").classList.remove("d-none");
-    
   } catch (error) {
     console.log(error)
   }
@@ -77,6 +77,8 @@ const showData = async (url) => {
     setTimeout(() => {
       removeChild(pokemonCards)
       display(data);
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
     });
     
   });
@@ -104,7 +106,7 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
       removeChild(pokemonCards);
       display(await Promise.all(randomData));
       title.innerHTML = "Random Pokémon";
-    }, 100);
+    });
 
   } catch (error) {
     console.log(error);

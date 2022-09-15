@@ -73,11 +73,14 @@ const removeChild = (parent) => {
   }
 }
 
+
 // Modal Pokedex -------------------------------------------------------------
 const modalLoad = document.querySelector(".modalLoad");
 const modalDialog = document.querySelector(".modalDialogInfo");
 
 const modalPokedex = async (pokemonName) => {
+  const start = Date.now()
+
   try {
     modalLoad.classList.remove("d-none");
     const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`);
@@ -239,35 +242,45 @@ const modalPokedex = async (pokemonName) => {
     habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
 
     // evolution chain
+
     let evolution;
     if (species.evolution_chain != null) { 
       evolution = await api_fetch(species.evolution_chain.url); 
       const chain = evolution.chain;
-      const chain1 = chain.species;
+      const chain1 = chain.species.url;
       const chain2 = chain.evolves_to.map(x => x).map(y => y.species);
       let chain3;
       const checkChain3 = chain.evolves_to.map(x => x.evolves_to)
       let evolutionChain = [];
 
-      if(chain2.length === 0) {
+      const chain2Name = chain2.map(x => x.url);
+      let chain3Name;
+
+      if (chain2.length === 0) {
         console.log("Chain 1:", chain1);
         console.log("The Pokemon Does not evolve");
       }
       else {
         if (checkChain3[0].length === 0) {
           console.log("Chain 1:", chain1);
-          console.log("Chain 2:", chain2)
+          console.log("Chain 2:", chain2Name)
           console.log("2 evolve")
         }
         else {
           console.log("Chain 1:", chain1)
-          console.log("Chain 2:", chain2)
+          console.log("Chain 2:", chain2Name)
           chain3 = checkChain3[0].map(x => x.species)
-          console.log("Chain 3:", chain3)
+          chain3Name = chain3.map(x => x.url)
+          console.log("Chain 3:", chain3Name)
         }
       }
       console.log(chain); 
     }
+    else {
+      console.log("No records");
+    }
+
+
 
     // modal Content
     modalDialog.innerHTML = `
@@ -401,7 +414,7 @@ const modalPokedex = async (pokemonName) => {
           </div> 
         </div>
       </div> `
-    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = ""; document.title = "Pokemon"; });
+    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = ""; document.title = "Pokemon"; console.clear(); });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
@@ -415,7 +428,10 @@ const modalPokedex = async (pokemonName) => {
     modalLoad.classList.add("d-none");
     console.log(error);
   }
+  const stop = Date.now()
+  console.log(`Time Taken to execute = ${(stop - start)/1000} seconds`);
 }
+
 
 // create function instanciate Pokemon class
 const newPokemon = (promise, parentElement) => {
