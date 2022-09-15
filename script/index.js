@@ -20,7 +20,9 @@ const display = async (promise) => {
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
         pokemonType.addEventListener("click", async (e) => {
+          const body = document.body;
           loader.classList.remove("d-none");
+          body.style.overflow = "hidden";
           const header = document.querySelector("header");
 
           const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
@@ -36,9 +38,10 @@ const display = async (promise) => {
             for (const type in typeColor) { 
               if (e.target.textContent == type) header.style.background = ` ${ typeColor[type] } `; 
             }
+            body.style.overflow = "auto";
             document.title = `${ e.target.textContent } Pokémon`;
             document.querySelector("#next-prev-btn").classList.add("d-none");
-            document.body.scrollTop = 0; // For Safari
+            body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           });
         });
