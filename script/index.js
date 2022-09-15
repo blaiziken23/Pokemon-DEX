@@ -19,10 +19,8 @@ const display = async (promise) => {
       });
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
-
         pokemonType.addEventListener("click", async (e) => {
           loader.classList.remove("d-none");
-
           const header = document.querySelector("header");
 
           const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
@@ -51,10 +49,8 @@ const display = async (promise) => {
     }
     const stop = Date.now()
     console.log(`Time Taken to execute = ${(stop - start)/1000} seconds`);
-    setTimeout(() => {
-      loader.classList.add("d-none");
-    });
     document.querySelector("#next-prev-btn").classList.remove("d-none");
+    loader.classList.add("d-none");
   } catch (error) {
     console.log(error)
   }
@@ -73,14 +69,10 @@ const showData = async (url) => {
     list.push(api_fetch(results[i].url));
   }
   Promise.all(list).then(data => {
-    
-    setTimeout(() => {
-      removeChild(pokemonCards)
-      display(data);
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    });
-    
+    removeChild(pokemonCards)
+    display(data);
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   });
 }
 const nextBtn = async () => (next != null) ? await showData(next) : alert("Highest ID");
@@ -102,11 +94,10 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
       randomData.push(api_fetch(url));
     }
     // console.log(await Promise.all(randomData))
-    setTimeout(async () => {
-      removeChild(pokemonCards);
-      display(await Promise.all(randomData));
-      title.innerHTML = "Random Pokémon";
-    });
+    removeChild(pokemonCards);
+    display(await Promise.all(randomData));
+    title.innerHTML = "Random Pokémon";
+    header.style.background = "var(--white)";
 
   } catch (error) {
     console.log(error);
@@ -123,7 +114,6 @@ document.querySelector("#search-pokemon").addEventListener("click", async (e) =>
   const pokeName = inputSearch.value.toLowerCase().trim().replace(/ /g, "-");
   modalPokedex(pokeName)
   document.querySelector("#input-search").value = "";
-
 })
 
 // window scroll

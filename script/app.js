@@ -47,7 +47,6 @@ const typeColor = {
   steel: '#B7B7CE',
   fairy: '#D685AD',
 };
-
 const pokemonColors = {
   black: '#BBB',
   blue: '#94DBEE',
@@ -72,7 +71,6 @@ const removeChild = (parent) => {
     parent.removeChild(parent.firstChild);
   }
 }
-
 
 // Modal Pokedex -------------------------------------------------------------
 const modalLoad = document.querySelector(".modalLoad");
@@ -242,44 +240,43 @@ const modalPokedex = async (pokemonName) => {
     habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
 
     // evolution chain
-
     let evolution;
     if (species.evolution_chain != null) { 
       evolution = await api_fetch(species.evolution_chain.url); 
-      const chain = evolution.chain;
-      const chain1 = chain.species.url;
-      const chain2 = chain.evolves_to.map(x => x).map(y => y.species);
+      const chain1 = api_fetch(evolution.chain.species.url);
+      const chain2 = evolution.chain.evolves_to.map(x => api_fetch(x.species.url))
       let chain3;
-      const checkChain3 = chain.evolves_to.map(x => x.evolves_to)
+      const checkChain3 = evolution.chain.evolves_to.map(x => x.evolves_to);
       let evolutionChain = [];
 
-      const chain2Name = chain2.map(x => x.url);
-      let chain3Name;
-
       if (chain2.length === 0) {
-        console.log("Chain 1:", chain1);
+        evolutionChain.push(api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`))
+        // console.log("Chain 1:", chain1);
         console.log("The Pokemon Does not evolve");
       }
       else {
         if (checkChain3[0].length === 0) {
-          console.log("Chain 1:", chain1);
-          console.log("Chain 2:", chain2Name)
-          console.log("2 evolve")
+          evolutionChain.push(chain1);
+          evolutionChain.push(chain2);
+          // console.log("Chain 1:", chain1);
+          // console.log("Chain 2:", chain2)
+          console.log("2 Stage Evolution");
         }
         else {
-          console.log("Chain 1:", chain1)
-          console.log("Chain 2:", chain2Name)
-          chain3 = checkChain3[0].map(x => x.species)
-          chain3Name = chain3.map(x => x.url)
-          console.log("Chain 3:", chain3Name)
+          // console.log("Chain 1:", chain1)
+          // console.log("Chain 2:", chain2)
+          chain3 = checkChain3[0].map(x => api_fetch(x.species.url));
+          evolutionChain.push(chain1);
+          evolutionChain.push(chain2);
+          evolutionChain.push(chain3);
+          // console.log("Chain 3:", chain3)
         }
       }
-      console.log(chain); 
+      // console.log( evolutionChain)
     }
     else {
       console.log("No records");
     }
-
 
 
     // modal Content
@@ -435,7 +432,6 @@ const modalPokedex = async (pokemonName) => {
 
 // create function instanciate Pokemon class
 const newPokemon = (promise, parentElement) => {
-
   const pokemon = new Pokemon(
     promise.id,
     promise.name,
@@ -448,7 +444,6 @@ const newPokemon = (promise, parentElement) => {
   )
   parentElement.innerHTML += pokemon.card();
 }
-
 
 export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon }
 
