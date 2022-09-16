@@ -1,4 +1,4 @@
-import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon } from "./app.js";
+import { api_fetch, typeColor, random, removeChild, modalPokedex, newPokemon } from "./app.js";
 
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");

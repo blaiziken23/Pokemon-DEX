@@ -228,11 +228,6 @@ const modalPokedex = async (pokemonName) => {
                 <div class="col-evolution col-sm">
                   ${ newPokemon(species1Data) }
                 </div>
-                <div class="col-evolution col-sm-1"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                  </svg>
-                </div>
                 <div class="col-evolution col-sm">
                   ${ species2Dataa }
                 </div>
@@ -250,19 +245,8 @@ const modalPokedex = async (pokemonName) => {
                 <div class="col-evolution col-sm">
                   ${ newPokemon(species1Data) }
                 </div>
-                <div class="col-evolution col-sm-1"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                  </svg>
-                </div>
                 <div class="col-evolution col-sm">
                   ${ species2Dataa }
-                </div>
-                <div class="col-evolution col-sm-1"> 
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
-                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
-                  </svg>
                 </div>
                 <div class="col-evolution col-sm"> 
                   ${ species3Dataa }
@@ -335,7 +319,7 @@ const modalPokedex = async (pokemonName) => {
                               <nav class="navbar pt-0">
                                 <h6 class="card-text"> Ability </h6>
                               </nav>
-                              <ol class="list-group">
+                              <ol class="list-group mb-3">
                                 <li class="list-group-item p-0">
                                   ${ effectEntries }
                                 </li>
@@ -404,7 +388,6 @@ const modalPokedex = async (pokemonName) => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div> `
@@ -413,7 +396,6 @@ const modalPokedex = async (pokemonName) => {
     document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => {
       x.removeAttribute("data-bs-toggle", "modal");
     })
-
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
@@ -428,7 +410,6 @@ const modalPokedex = async (pokemonName) => {
   const stop = Date.now()
   console.log(`Time Taken to execute = ${ (stop - start) / 1000 } seconds`);
 }
-
 
 // create function instanciate Pokemon class
 const newPokemon = (promise) => {
@@ -445,4 +426,4 @@ const newPokemon = (promise) => {
   return pokemon.card();
 }
 
-export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon }
+export { api_fetch, typeColor, random, removeChild, modalPokedex, newPokemon }
