@@ -3,11 +3,16 @@ import { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, moda
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");
 const title = document.querySelector(".container-title");
+const next_prevBtn = document.querySelector("#next-prev-btn");
+const header = document.querySelector("header");
+const prevBtnEl = document.getElementById("prev");
+const nextBtnEl = document.getElementById("next");
+const randomBtn = document.getElementById("random-pokemon");
+const inputSearch = document.getElementById("input-search");
+const body = document.body;
 
 const display = async (promise) => {
   try {
-    const start = Date.now()
-
     for (let i = 0; i < promise.length; i++) {
       
       pokemonCards.innerHTML += newPokemon(promise[i]);
@@ -20,10 +25,8 @@ const display = async (promise) => {
 
       document.querySelectorAll(".pokemon-type").forEach(pokemonType => {
         pokemonType.addEventListener("click", async (e) => {
-          const body = document.body;
           loader.classList.remove("d-none");
           body.style.overflow = "hidden";
-          const header = document.querySelector("header");
 
           const type = await api_fetch(`https://pokeapi.co/api/v2/type/${ e.target.textContent }`);
           const pokemonList = type.pokemon;
@@ -31,25 +34,20 @@ const display = async (promise) => {
 
           pokemonList.map(x => { list.push(api_fetch(x.pokemon.url)) });
           await Promise.all(list).then(pokemon => {
-          
             title.innerHTML = `${ pokemon.length } ${ e.target.textContent } Pokémon type`;
             removeChild(pokemonCards);
             display(pokemon);
-            for (const type in typeColor) { 
-              if (e.target.textContent == type) header.style.background = ` ${ typeColor[type] } `; 
-            }
+            for (const type in typeColor) { if (e.target.textContent == type) header.style.background = ` ${ typeColor[type] } `; }
             body.style.overflow = "auto";
             document.title = `${ e.target.textContent } Pokémon`;
-            document.querySelector("#next-prev-btn").classList.add("d-none");
+            next_prevBtn.classList.add("d-none");
             body.scrollTop = 0; // For Safari
             document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
           });
         });
       });
     }
-    const stop = Date.now()
-    console.log(`Time Taken to execute = ${(stop - start)/1000} seconds`);
-    document.querySelector("#next-prev-btn").classList.remove("d-none");
+    next_prevBtn.classList.remove("d-none");
     loader.classList.add("d-none");
   } catch (error) {
     console.log(error)
@@ -77,12 +75,12 @@ const showData = async (url) => {
 }
 const nextBtn = async () => (next != null) ? await showData(next) : alert("Highest ID");
 const prevBtn = async () => (prev != null) ? await showData(prev) : alert("Lowest ID");
-document.querySelector("#prev").addEventListener("click", prevBtn);
-document.querySelector("#next").addEventListener("click", nextBtn);
+prevBtnEl.addEventListener("click", prevBtn);
+nextBtnEl.addEventListener("click", nextBtn);
 showData(`https://pokeapi.co/api/v2/pokemon`);
 
 // Random
-document.querySelector("#random-pokemon").addEventListener("click", async () => {
+randomBtn.addEventListener("click", async () => {
   loader.classList.remove("d-none");
   document.querySelector("#next-prev-btn").classList.add("d-none");
   try {
@@ -93,7 +91,6 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
       const url = data.results[randomPokemon].url;
       randomData.push(api_fetch(url));
     }
-    // console.log(await Promise.all(randomData))
     removeChild(pokemonCards);
     display(await Promise.all(randomData));
     title.innerHTML = "Random Pokémon";
@@ -102,26 +99,21 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
   } catch (error) {
     console.log(error);
   }
-  document.querySelector("#input-search").value = "";
+  inputSearch.value = "";
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   document.title = `Random Pokémon`;
-
 });
 
 // Search
 document.querySelector("#search-pokemon").addEventListener("click", async (e) => {
   e.preventDefault();
-  const inputSearch = document.querySelector("#input-search");
   const pokeName = inputSearch.value.toLowerCase().trim().replace(/ /g, "-");
   modalPokedex(pokeName)
-  document.querySelector("#input-search").value = "";
+  inputSearch.value = "";
 })
 
 // window scroll
-const header = document.querySelector("header");
 window.addEventListener("scroll", () => {
   window.scrollY == 0 ? header.classList.remove("shadow-sm") : header.classList.add("shadow-sm");
 });
-
-

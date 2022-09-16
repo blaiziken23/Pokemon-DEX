@@ -86,8 +86,6 @@ const modalPokedex = async (pokemonName) => {
 
     const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
     const varieties = await Promise.all(varity).then(x => { return x });
-    // console.log(species)
-    // console.log(pokemonInfo)
    
     // pokemonColor 
     let colorPokemon;
@@ -102,25 +100,13 @@ const modalPokedex = async (pokemonName) => {
         <div class="progress-div pb-2"> 
           <label for="${ stat.stat.name }" class="form-label m-0">${ stat.stat.name }</label>
           <div class="progress" title="${ stat.base_stat }">
-            <div class="progress-bar animate__animated animate__fadeInLeft" id="${ stat.stat.name }" role="progressbar" style="width:${ value }%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
+            <div class="progress-bar" id="${ stat.stat.name }" role="progressbar" style="width:${ value }%; background: linear-gradient(${ colorPokemon }, #ECEFF1);">
               ${ stat.base_stat }
             </div>
           </div>
         </div> `
     }).join("");
 
-    // new pokemon card
-    const pokemon = new Pokemon(
-      pokemonInfo.id,
-      pokemonInfo.name.replace(/-/g, " "),
-      pokemonInfo.sprites.other['official-artwork'].front_default,
-      pokemonInfo.types.map(poke_type => {
-        let bgColor = "";
-        for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-        return `<li class="list-group-item" style="background-color:${ bgColor };"> ${ poke_type.type.name } </li>`;
-      }).join("")
-    )
-    
     // text entries
     const randomEntries = async () => {
       const textEntries = await species.flavor_text_entries.filter(eng => eng.language.name === "en");
@@ -128,7 +114,7 @@ const modalPokedex = async (pokemonName) => {
       const entries = textEntries[randomText].flavor_text;
       const version = textEntries[randomText].version.name;
       return ` 
-        <figure class="m-0 animate__animated animate__fadeIn">
+        <figure class="m-0">
           <blockquote class="blockquote mb-2">
             <p class=""> ${ entries } </p>
           </blockquote>
@@ -143,14 +129,11 @@ const modalPokedex = async (pokemonName) => {
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = await Promise.all(ability).then(x => { return x });
     const effectEntries = abilities.map((effectEntry, i) => { 
-      // console.log(effectEntry)
-      let effect;
       let shortEffect;
       effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getEffect => { 
-        effect = getEffect.effect; 
         shortEffect = getEffect.short_effect; 
       });
-      if (effect == undefined || shortEffect == undefined) effect = shortEffect = "No Description";
+      if (shortEffect == undefined) shortEffect = "No Description";
       return `
         <h6 class="text-capitalize"><span> ${ i + 1 } </span> - ${ effectEntry.name.replace(/-/g, " ") } </h6>
         <p class="card-text">${ shortEffect }</p> `
@@ -162,17 +145,9 @@ const modalPokedex = async (pokemonName) => {
 
     let x2DamageFrom = new Set();
     let x2DamageTo = new Set();
-    let halfDamageFrom = new Set();
-    let halfDamageTo = new Set();
-    let noDamageFrom = new Set();
-    let noDamageTo = new Set();
     types.map(dmg => {
       dmg.damage_relations.double_damage_from.map(type => x2DamageFrom.add(type.name));
       dmg.damage_relations.double_damage_to.map(type =>  x2DamageTo.add(type.name));
-      dmg.damage_relations.half_damage_from.map(type => halfDamageFrom.add(type.name));
-      dmg.damage_relations.half_damage_to.map(type => halfDamageTo.add(type.name));
-      dmg.damage_relations.no_damage_from.map(type => noDamageFrom.add(type.name));
-      dmg.damage_relations.no_damage_to.map(type => noDamageTo.add(type.name));
     });
     const dmgRelationsValues = (dmgRelations) => {
       const typeList = Array.from(dmgRelations).map(x => {
@@ -203,26 +178,7 @@ const modalPokedex = async (pokemonName) => {
               ${ dmgRelationsValues(x2DamageTo) }
             </div>
           </div>
-        </div>
-        <hr class="my-2">
-        <div class="row"> 
-          <div class="col-sm">
-            <nav class="navbar">
-              <h6 class="card-text"> no Damage from </h6>
-            </nav>
-              <div class="card-text damage-relation"> 
-                ${ dmgRelationsValues(noDamageFrom) }
-              </div>
-            </div>
-          <div class="col-sm">
-            <nav class="navbar">
-              <h6 class="card-text"> no Damage to </h6>
-            </nav>
-              <div class="card-text damage-relation"> 
-                ${ dmgRelationsValues(noDamageTo) }
-              </div>
-            </div>
-        </div> `
+        </div>`
     }
     
     // pokemon Height
@@ -241,11 +197,16 @@ const modalPokedex = async (pokemonName) => {
 
     // evolution chain
     const evolution = species.evolution_chain;
+    const noEvolution =  `
+      <div class="row">
+        <div class="col-evolution col-sm">
+          ${ newPokemon(pokemonInfo) }
+        </div>
+      </div> `
+    
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
-        
-        const noEvolution = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`)
         
         const species1 = await api_fetch(evolutionChain.chain.species.url)
         const species1Data = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ species1.id }`)
@@ -255,15 +216,10 @@ const modalPokedex = async (pokemonName) => {
         const species2Dataa = await Promise.all(species2Data).then(x => {
           return x.map( y => { return newPokemon(y) }).join("");
         });
-        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to)
+        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to);
 
         if (species2.length === 0) {
-          return `
-            <div class="row">
-              <div class="col-evolution col-sm">
-                ${ newPokemon(noEvolution) }
-              </div>
-            </div> `
+          return noEvolution;
         }
         else {
           if (checkSpecies3[0].length === 0) {
@@ -316,7 +272,7 @@ const modalPokedex = async (pokemonName) => {
         }
       }
       else {
-        return "No Record"
+        return noEvolution;
       }
     }
 
@@ -331,7 +287,7 @@ const modalPokedex = async (pokemonName) => {
           <div class="container"> 
             <div class="row">
               <div class="column col-md">
-                ${ pokemon.card() }
+                ${ newPokemon(pokemonInfo) }
               </div>
 
               <div class="column col-md">
