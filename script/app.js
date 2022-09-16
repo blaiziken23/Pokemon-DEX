@@ -198,6 +198,9 @@ const modalPokedex = async (pokemonName) => {
     // evolution chain
     const evolution = species.evolution_chain;
     const noEvolution =  `
+      <nav class="navbar pt-0">
+        <h6 class="card-text"> This Pokemon does not evolve </h6>
+      </nav>
       <div class="row">
         <div class="col-evolution col-sm">
           ${ newPokemon(pokemonInfo) }
@@ -397,7 +400,7 @@ const modalPokedex = async (pokemonName) => {
             <div class="row"> 
               <div class="column col-md">
                 <div class="card evolution"> 
-                  <div class="card-header"> 
+                  <div class="card-header px-0"> 
                     <h4 class="card-text"> Evolutions </h4>
                   </div>
                   ${ await displayEvolution() }
