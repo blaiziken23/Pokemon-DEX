@@ -203,7 +203,7 @@ const modalPokedex = async (pokemonName) => {
           ${ newPokemon(pokemonInfo) }
         </div>
       </div> `
-    
+
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
@@ -266,9 +266,9 @@ const modalPokedex = async (pokemonName) => {
         <div class="modal-header" style="background:${ colorPokemon }">
           <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
         <div class="modal-body px-0"> 
           <div class="container"> 
+           
             <div class="row">
               <div class="column col-md">
                 ${ newPokemon(pokemonInfo) }
@@ -391,7 +391,11 @@ const modalPokedex = async (pokemonName) => {
           </div>
         </div>
       </div> `
-    document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = ""; document.title = "Pokemon"; console.clear(); });
+    document.querySelector(".btn-close").addEventListener("click", () => { 
+      modalDialog.innerHTML = "";
+      document.title = "Pokemon"; 
+      console.clear(); 
+    });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
     document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => {
       x.removeAttribute("data-bs-toggle", "modal");
