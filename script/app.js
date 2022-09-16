@@ -241,7 +241,7 @@ const modalPokedex = async (pokemonName) => {
 
     // evolution chain
     const evolution = species.evolution_chain;
-    console.log(await api_fetch(evolution.url))
+    // console.log(await api_fetch(evolution.url))
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
@@ -379,7 +379,7 @@ const modalPokedex = async (pokemonName) => {
         }
       }
       else {
-        console.log("No Record")
+        return "No Record"
       }
     }
 
