@@ -124,3 +124,12 @@
   }
 
 }
+
+@media screen and (max-width: 576px) {
+
+  .col-evolution svg {
+    transform: rotate(90deg);
+    margin-bottom: 10px;
+  }
+
+}

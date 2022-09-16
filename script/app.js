@@ -225,10 +225,15 @@ const modalPokedex = async (pokemonName) => {
           if (checkSpecies3[0].length === 0) {
             return `
               <div class="row">
-                <div class="col-evolution col-sm">
+                <div class="col-evolution col-sm-5">
                   ${ newPokemon(species1Data) }
                 </div>
-                <div class="col-evolution col-sm">
+                <div class="col-evolution col-sm-1 p-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm-6">
                   ${ species2Dataa }
                 </div>
               </div> `
@@ -242,13 +247,24 @@ const modalPokedex = async (pokemonName) => {
 
             return `
               <div class="row">
-                <div class="col-evolution col-sm">
+                <div class="col-evolution col-sm-3">
                   ${ newPokemon(species1Data) }
                 </div>
-                <div class="col-evolution col-sm">
+                <div class="col-evolution col-sm-1 p-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm-3">
                   ${ species2Dataa }
                 </div>
-                <div class="col-evolution col-sm"> 
+                <div class="col-evolution col-sm-1 p-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm-3"> 
                   ${ species3Dataa }
                 </div>
               </div> `
@@ -267,7 +283,7 @@ const modalPokedex = async (pokemonName) => {
           <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body px-0"> 
-          <div class="container"> 
+          <div class="container overflow-hidden"> 
            
             <div class="row">
               <div class="column col-md">
