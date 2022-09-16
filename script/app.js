@@ -240,44 +240,148 @@ const modalPokedex = async (pokemonName) => {
     habitat == null ? habitatName = "None" : habitatName = species.habitat.name;
 
     // evolution chain
-    let evolution;
-    if (species.evolution_chain != null) { 
-      evolution = await api_fetch(species.evolution_chain.url); 
-      const chain1 = api_fetch(evolution.chain.species.url);
-      const chain2 = evolution.chain.evolves_to.map(x => api_fetch(x.species.url))
-      let chain3;
-      const checkChain3 = evolution.chain.evolves_to.map(x => x.evolves_to);
-      let evolutionChain = [];
+    const evolution = species.evolution_chain;
+    console.log(await api_fetch(evolution.url))
+    const displayEvolution = async () => {
+      if (evolution != null) {
+        const evolutionChain = await api_fetch(evolution.url);
+        
+        const noEvolution = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`)
+        
+        const species1 = await api_fetch(evolutionChain.chain.species.url)
+        const species1Data = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ species1.id }`)
 
-      if (chain2.length === 0) {
-        evolutionChain.push(api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`))
-        // console.log("Chain 1:", chain1);
-        console.log("The Pokemon Does not evolve");
-      }
-      else {
-        if (checkChain3[0].length === 0) {
-          evolutionChain.push(chain1);
-          evolutionChain.push(chain2);
-          // console.log("Chain 1:", chain1);
-          // console.log("Chain 2:", chain2)
-          console.log("2 Stage Evolution");
+        const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
+        const species2Data = (await Promise.all(species2).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
+        const species2Dataa = await Promise.all(species2Data).then(x => {
+          const data = x.map(y => {
+            const pokemon = new Pokemon(
+              y.id,
+              y.name,
+              y.sprites.other['official-artwork'].front_default,
+              y.types.map(poke_type => {
+                let bgColor = "";
+                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+              }).join(""))
+             return pokemon.card()
+          }).join("")
+
+          return data;
+        });
+
+        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to)
+
+        if (species2.length === 0) {
+          console.log(noEvolution)
+          console.log("The Pokemon Does not evolve");
+          const pokemon = new Pokemon(
+            noEvolution.id,
+            noEvolution.name,
+            noEvolution.sprites.other['official-artwork'].front_default,
+            noEvolution.types.map(poke_type => {
+              let bgColor = "";
+              for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+              return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+            }).join("")
+          )
+          return `
+            <div class="row">
+              <div class="col-evolution col-sm">
+                ${ pokemon.card() }
+              </div>
+            </div> `
         }
         else {
-          // console.log("Chain 1:", chain1)
-          // console.log("Chain 2:", chain2)
-          chain3 = checkChain3[0].map(x => api_fetch(x.species.url));
-          evolutionChain.push(chain1);
-          evolutionChain.push(chain2);
-          evolutionChain.push(chain3);
-          // console.log("Chain 3:", chain3)
+          if (checkSpecies3[0].length === 0) {
+            console.log(species1Data)
+            console.log("2 Stage Evolution");
+            const species1Dataa = new Pokemon(
+              species1Data.id,
+              species1Data.name,
+              species1Data.sprites.other['official-artwork'].front_default,
+              species1Data.types.map(poke_type => {
+                let bgColor = "";
+                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+              }).join("")
+            )
+            return `
+              <div class="row">
+                <div class="col-evolution col-sm">
+                  ${ species1Dataa.card() }
+                </div>
+                <div class="col-evolution col-sm-1"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm">
+                  ${ species2Dataa }
+                </div>
+              </div> `
+          }
+          else {
+            const species3 = checkSpecies3[0].map(x => api_fetch(x.species.url))
+            const species3Data = (await Promise.all(species3).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
+            const species3Dataa = await Promise.all(species3Data).then(x => {
+              const data = x.map(y => {
+                const pokemon = new Pokemon(
+                  y.id,
+                  y.name,
+                  y.sprites.other['official-artwork'].front_default,
+                  y.types.map(poke_type => {
+                    let bgColor = "";
+                    for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+                    return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+                  }).join("")
+                )
+                 return pokemon.card();
+              }).join("")
+              return data;
+            })
+
+            const species1Dataa = new Pokemon(
+              species1Data.id,
+              species1Data.name,
+              species1Data.sprites.other['official-artwork'].front_default,
+              species1Data.types.map(poke_type => {
+                let bgColor = "";
+                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+              }).join("")
+            )
+            return `
+              <div class="row">
+                <div class="col-evolution col-sm">
+                  ${ species1Dataa.card() }
+                </div>
+                <div class="col-evolution col-sm-1"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm">
+                  ${ species2Dataa }
+                </div>
+                <div class="col-evolution col-sm-1"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
+                <div class="col-evolution col-sm"> 
+                  ${ species3Dataa }
+                </div>
+              </div>
+               `
+          }
         }
       }
-      // console.log( evolutionChain)
+      else {
+        console.log("No Record")
+      }
     }
-    else {
-      console.log("No records");
-    }
-
 
     // modal Content
     modalDialog.innerHTML = `
@@ -285,10 +389,10 @@ const modalPokedex = async (pokemonName) => {
         <div class="modal-header" style="background:${ colorPokemon }">
           <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
         <div class="modal-body px-0"> 
           <div class="container"> 
             <div class="row">
-              
               <div class="column col-md">
                 ${ pokemon.card() }
               </div>
@@ -342,7 +446,6 @@ const modalPokedex = async (pokemonName) => {
                                 <li class="list-group-item p-0">
                                   ${ effectEntries }
                                 </li>
-                                <hr class="my-2"> 
                               </ol>
                             </div>
                           </div>
@@ -394,25 +497,30 @@ const modalPokedex = async (pokemonName) => {
                       </div>
                     </div>
                   </div>
-                </card>
+                </div>
               </div>
             </div>
-
-            <div class="row">
-              <div class="col"> 
-                <div class="card">
-                  <div class="card-header py-0"> 
-                    <h5 class="card-text"> Pokémon Evolution Chain </h5>
+            <hr class="my-2"> 
+            <div class="row"> 
+              <div class="column col-md">
+                <div class="card evolution"> 
+                  <div class="card-header"> 
+                    <h4 class="card-text"> Evolutions </h4>
                   </div>
-                <div>
+                  ${ await displayEvolution() }
+                </div>
               </div>
             </div>
 
-          </div> 
+          </div>
         </div>
       </div> `
     document.querySelector(".btn-close").addEventListener("click", () => { modalDialog.innerHTML = ""; document.title = "Pokemon"; console.clear(); });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
+    document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => {
+      x.removeAttribute("data-bs-toggle", "modal");
+    })
+
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
       document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
     })
@@ -421,12 +529,11 @@ const modalPokedex = async (pokemonName) => {
 
   } catch (error) {
     alert("Please Try Again!!!");
-    // window.location = "index.html";
     modalLoad.classList.add("d-none");
     console.log(error);
   }
   const stop = Date.now()
-  console.log(`Time Taken to execute = ${(stop - start)/1000} seconds`);
+  console.log(`Time Taken to execute = ${ (stop - start) / 1000 } seconds`);
 }
 
 
@@ -446,65 +553,3 @@ const newPokemon = (promise, parentElement) => {
 }
 
 export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon }
-
-
-
-// display Card
-// const loader = document.querySelector(".loader");
-// const display = async (promise) => {
-//   try {
-//     for (let i = 0; i < promise.length; i++) {
-
-//       newPokemon(promise);
-
-//       document.querySelectorAll(".card-title").forEach(pokemonName => {
-//         pokemonName.addEventListener("click", (e) => {
-//           modalPokedex(e.target.textContent);
-//         });
-//       });
-
-//     }
-//     setTimeout(() => {
-//       loader.classList.add("d-none");
-//     });
-//     document.querySelector("#next-prev-btn").classList.remove("d-none");
-    
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-
-/* <div class="col-md"> 
-  <ol class="list-group mb-2">
-    <li class="list-group-item p-0">
-      <div class="me-auto ">
-        <nav class="navbar pt-0">
-          <h6 class="fw-bold card-text"> Effect </h6>
-        </nav>
-        <h6 class="text-capitalize"><span class="fw-bold">${ i + 1 } -</span> ${ effectEntry.name.replace(/-/g, " ") }</h6>
-        ${ effect }
-      </div>
-    </li>
-  </ol>
-</div> */
-
-/* <hr class="my-2">
-<div class="row"> 
-  <div class="col-sm">
-    <nav class="navbar">
-      <h6 class="card-text"> Half Damage from </h6>
-    </nav>
-      <div class="card-text damage-relation"> 
-        ${ dmgRelationsValues(halfDamageFrom) }
-      </div>
-    </div>
-  <div class="col-sm">
-    <nav class="navbar">
-      <h6 class="card-text"> Half Damage to </h6>
-    </nav>
-      <div class="card-text damage-relation"> 
-        ${ dmgRelationsValues(halfDamageTo) }
-      </div>
-    </div>
-</div> */

@@ -12,7 +12,7 @@ main {
   justify-content: center;
   align-items: center;
 }
-.pokemon-cards .card {
+.pokemon-cards .card, .modal-body .column .evolution .card   {
   width: 160px;
   overflow: hidden;
   height: 250px;

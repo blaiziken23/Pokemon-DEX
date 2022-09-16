@@ -92,6 +92,30 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* evolution */
+.modal-body .column .evolution .row, .modal-body .column .evolution .row .col-evolution {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.modal-body .column .evolution .row .col-evolution {
+  gap: 5px;
+}
+.modal-body .column .evolution .card img {
+  padding: 1rem !important;
+  background: var(--gray);
+}
+.modal-body .column .evolution .card .card-title {
+  font-size: 1em;
+}
+.modal-body .column .evolution .card li, .modal-body .column .evolution .card .id {
+  font-size: 14px;
+}
+
+
 @media screen and (max-width: 1200px) {
   
   .modal-body .container > .row  {

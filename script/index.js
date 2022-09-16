@@ -105,6 +105,8 @@ document.querySelector("#random-pokemon").addEventListener("click", async () => 
   document.querySelector("#input-search").value = "";
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  document.title = `Random Pokémon`;
+
 });
 
 // Search
@@ -121,3 +123,5 @@ const header = document.querySelector("header");
 window.addEventListener("scroll", () => {
   window.scrollY == 0 ? header.classList.remove("shadow-sm") : header.classList.add("shadow-sm");
 });
+
+
