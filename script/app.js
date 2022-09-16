@@ -241,7 +241,6 @@ const modalPokedex = async (pokemonName) => {
 
     // evolution chain
     const evolution = species.evolution_chain;
-    // console.log(await api_fetch(evolution.url))
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
@@ -254,62 +253,24 @@ const modalPokedex = async (pokemonName) => {
         const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
         const species2Data = (await Promise.all(species2).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
         const species2Dataa = await Promise.all(species2Data).then(x => {
-          const data = x.map(y => {
-            const pokemon = new Pokemon(
-              y.id,
-              y.name,
-              y.sprites.other['official-artwork'].front_default,
-              y.types.map(poke_type => {
-                let bgColor = "";
-                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-              }).join(""))
-             return pokemon.card()
-          }).join("")
-
-          return data;
+          return x.map( y => { return newPokemon(y) }).join("");
         });
-
         const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to)
 
         if (species2.length === 0) {
-          console.log(noEvolution)
-          console.log("The Pokemon Does not evolve");
-          const pokemon = new Pokemon(
-            noEvolution.id,
-            noEvolution.name,
-            noEvolution.sprites.other['official-artwork'].front_default,
-            noEvolution.types.map(poke_type => {
-              let bgColor = "";
-              for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-              return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-            }).join("")
-          )
           return `
             <div class="row">
               <div class="col-evolution col-sm">
-                ${ pokemon.card() }
+                ${ newPokemon(noEvolution) }
               </div>
             </div> `
         }
         else {
           if (checkSpecies3[0].length === 0) {
-            console.log(species1Data)
-            console.log("2 Stage Evolution");
-            const species1Dataa = new Pokemon(
-              species1Data.id,
-              species1Data.name,
-              species1Data.sprites.other['official-artwork'].front_default,
-              species1Data.types.map(poke_type => {
-                let bgColor = "";
-                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-              }).join("")
-            )
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
-                  ${ species1Dataa.card() }
+                  ${ newPokemon(species1Data) }
                 </div>
                 <div class="col-evolution col-sm-1"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -325,36 +286,13 @@ const modalPokedex = async (pokemonName) => {
             const species3 = checkSpecies3[0].map(x => api_fetch(x.species.url))
             const species3Data = (await Promise.all(species3).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
             const species3Dataa = await Promise.all(species3Data).then(x => {
-              const data = x.map(y => {
-                const pokemon = new Pokemon(
-                  y.id,
-                  y.name,
-                  y.sprites.other['official-artwork'].front_default,
-                  y.types.map(poke_type => {
-                    let bgColor = "";
-                    for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-                    return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-                  }).join("")
-                )
-                 return pokemon.card();
-              }).join("")
-              return data;
+              return x.map(y => { return newPokemon(y); }).join("")
             })
 
-            const species1Dataa = new Pokemon(
-              species1Data.id,
-              species1Data.name,
-              species1Data.sprites.other['official-artwork'].front_default,
-              species1Data.types.map(poke_type => {
-                let bgColor = "";
-                for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-                return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-              }).join("")
-            )
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
-                  ${ species1Dataa.card() }
+                  ${ newPokemon(species1Data) }
                 </div>
                 <div class="col-evolution col-sm-1"> 
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -373,8 +311,7 @@ const modalPokedex = async (pokemonName) => {
                 <div class="col-evolution col-sm"> 
                   ${ species3Dataa }
                 </div>
-              </div>
-               `
+              </div> `
           }
         }
       }
@@ -538,7 +475,7 @@ const modalPokedex = async (pokemonName) => {
 
 
 // create function instanciate Pokemon class
-const newPokemon = (promise, parentElement) => {
+const newPokemon = (promise) => {
   const pokemon = new Pokemon(
     promise.id,
     promise.name,
@@ -549,7 +486,7 @@ const newPokemon = (promise, parentElement) => {
       return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
     }).join("")
   )
-  parentElement.innerHTML += pokemon.card();
+  return pokemon.card();
 }
 
 export { api_fetch, Pokemon, typeColor, random, pokemonColors, removeChild, modalPokedex, newPokemon }

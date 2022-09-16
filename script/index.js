@@ -10,7 +10,7 @@ const display = async (promise) => {
 
     for (let i = 0; i < promise.length; i++) {
       
-      newPokemon(promise[i], pokemonCards);
+      pokemonCards.innerHTML += newPokemon(promise[i]);
 
       document.querySelectorAll(".card-title").forEach(pokemonName => {
         pokemonName.addEventListener("click", (e) => {
