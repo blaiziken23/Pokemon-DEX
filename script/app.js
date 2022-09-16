@@ -401,7 +401,7 @@ const modalPokedex = async (pokemonName) => {
               <div class="column col-md">
                 <div class="card evolution"> 
                   <div class="card-header px-0"> 
-                    <h4 class="card-text"> Evolutions </h4>
+                    <h4 class="card-text"> Evolution chain </h4>
                   </div>
                   ${ await displayEvolution() }
                 </div>
