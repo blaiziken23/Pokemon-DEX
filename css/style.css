@@ -37,10 +37,11 @@ button:focus, input:focus {
   border-radius: 5px !important;
 }
 
+
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 5px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
@@ -49,7 +50,7 @@ button:focus, input:focus {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background:  var(--darkgray);
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {

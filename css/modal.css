@@ -1,7 +1,16 @@
+.modal-fullscreen .modal-body {
+  overflow: initial;
+  background: var(--white);
+}
 .modal-content {
   position: relative;
   background: var(--white);
   color: var(--darkgray);
+}
+.modal-content .modal-header {
+  z-index: 1;
+  position: sticky;
+  top: 0;
 }
 .modal-body .row > .column {
   padding: 0;
@@ -96,6 +105,8 @@
 /* evolution */
 .modal-body .column .evolution .row {
   padding: 17px 0 !important;
+  /* max-height: 500px; */
+  /* overflow: auto; */
 }
 .modal-body .column .evolution .row, .modal-body .column .evolution .row .col-evolution {
   display: flex;
@@ -106,6 +117,9 @@
 }
 .modal-body .column .evolution .row .col-evolution {
   gap: 10px;
+}
+.modal-body .column .evolution .row .svg {
+  width: 50px !important;
 }
 .modal-body .column .evolution .card img {
   padding: 1rem !important;
@@ -118,27 +132,30 @@
   font-size: 13px;
 }
 
+/* xl */
 @media screen and (max-width: 1200px) {
   
   .modal-body .container > .row  {
     align-items: center;
   }
 
-}
 
+}
+/* md */
 @media screen and (max-width: 576px) {
 
   .col-evolution svg {
     transform: rotate(90deg);
-    margin-bottom: 10px;
+    margin-bottom: 17px;
   }
-  .lastEvolution {
-    flex-direction: row;
+  .modal-body .column .card img {
+    padding: 17px !important;
   }
+
 
 }
-
-@media screen and (max-width: 1500px) and (min-width: 576px) {
+/* xxl */
+@media screen and (min-width: 1400px) {
 
   .lastEvolution {
     flex-direction: column;
