@@ -118,9 +118,7 @@
 .modal-body .column .evolution .row .col-evolution {
   gap: 10px;
 }
-.modal-body .column .evolution .row .svg {
-  width: 50px !important;
-}
+
 .modal-body .column .evolution .card img {
   padding: 1rem !important;
   background: var(--gray);
@@ -150,6 +148,9 @@
   }
   .modal-body .column .card img {
     padding: 17px !important;
+  }
+  .modal-body .column .evolution .row .svg {
+    justify-content: center !important;
   }
 
 
