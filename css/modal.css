@@ -95,16 +95,17 @@
 
 /* evolution */
 .modal-body .column .evolution .row {
-  padding: 17px;
+  padding: 17px 0 !important;
 }
 .modal-body .column .evolution .row, .modal-body .column .evolution .row .col-evolution {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  padding: 0;
 }
 .modal-body .column .evolution .row .col-evolution {
-  gap: 5px;
+  gap: 10px;
 }
 .modal-body .column .evolution .card img {
   padding: 1rem !important;
@@ -131,5 +132,16 @@
     transform: rotate(90deg);
     margin-bottom: 10px;
   }
+  .lastEvolution {
+    flex-direction: row;
+  }
 
+}
+
+@media screen and (max-width: 1500px) and (min-width: 576px) {
+
+  .lastEvolution {
+    flex-direction: column;
+  }
+  
 }

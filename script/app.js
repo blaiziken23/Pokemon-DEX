@@ -133,7 +133,7 @@ const modalPokedex = async (pokemonName) => {
       effectEntry.effect_entries.filter(eng => eng.language.name === "en").map(getEffect => { 
         shortEffect = getEffect.short_effect; 
       });
-      if (shortEffect == undefined) shortEffect = "No Description";
+      if (shortEffect == undefined) shortEffect = "";
       return `
         <h6 class="text-capitalize"><span> ${ i + 1 } </span> - ${ effectEntry.name.replace(/-/g, " ") } </h6>
         <p class="card-text">${ shortEffect }</p> `
@@ -198,7 +198,7 @@ const modalPokedex = async (pokemonName) => {
     // evolution chain
     const evolution = species.evolution_chain;
     const noEvolution =  `
-      <nav class="navbar pt-0">
+      <nav class="navbar px-3 pt-0">
         <h6 class="card-text"> This Pokemon does not evolve </h6>
       </nav>
       <div class="row">
@@ -236,7 +236,7 @@ const modalPokedex = async (pokemonName) => {
                     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                   </svg>
                 </div>
-                <div class="col-evolution col-sm-6">
+                <div class="col-evolution col-sm-6 lastEvolution">
                   ${ species2Dataa }
                 </div>
               </div> `
@@ -267,7 +267,7 @@ const modalPokedex = async (pokemonName) => {
                     <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
                   </svg>
                 </div>
-                <div class="col-evolution col-sm-3"> 
+                <div class="col-evolution col-sm-3 lastEvolution"> 
                   ${ species3Dataa }
                 </div>
               </div> `
@@ -400,7 +400,7 @@ const modalPokedex = async (pokemonName) => {
             <div class="row"> 
               <div class="column col-md">
                 <div class="card evolution"> 
-                  <div class="card-header px-0"> 
+                  <div class="card-header"> 
                     <h4 class="card-text"> Evolution chain </h4>
                   </div>
                   ${ await displayEvolution() }

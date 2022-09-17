@@ -13,9 +13,9 @@ main {
   align-items: center;
 }
 .pokemon-cards .card, .modal-body .column .evolution .card   {
-  width: 160px;
+  width: 155px;
   overflow: hidden;
-  height: 250px;
+  height: 245px;
 }
 .pokemon-cards .card .card-body {
   background: var(--gray);
