@@ -1,3 +1,5 @@
+let btnClose, cardTitle, cardTitleAll, randomEntriesBtn, randomEntriesText;
+
 // Fetch api
 const api_fetch = async url => {
   return (await fetch(url)).json();
@@ -35,7 +37,7 @@ const newPokemon = (promise) => {
     promise.types.map(poke_type => {
       let bgColor = "";
       for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+      return `<li class="list-group-item pokemon-type" style="background-color:${ bgColor };">${ poke_type.type.name }</li>`;
     }).join("")
   )
   return pokemon.card();
@@ -230,6 +232,7 @@ const modalPokedex = async (pokemonName) => {
 
         const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
         const species2Data = (await Promise.all(species2).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
+
         const species2Dataa = await Promise.all(species2Data).then(x => {
           return x.map( y => { return newPokemon(y) }).join("");
         });
@@ -256,6 +259,7 @@ const modalPokedex = async (pokemonName) => {
               </div> `
           }
           else {
+            
             const species3 = checkSpecies3[0].map(x => api_fetch(x.species.url))
             const species3Data = (await Promise.all(species3).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
             const species3Dataa = await Promise.all(species3Data).then(x => {
@@ -293,7 +297,17 @@ const modalPokedex = async (pokemonName) => {
       }
     }
 
+    // Pokemon Weight
+    const weight = ((pokemonInfo.weight / 10) * 2.205).toFixed(1);
+
+    // Pokemon Egg groups
+    const egg_groups = species.egg_groups.map(name => ` ${ name.name }`);
+
+    // pokemon Image card
+    const pokemonCard = newPokemon(pokemonInfo);
+
     // modal Content
+    const startHtml = Date.now();
     modalDialog.innerHTML = `
       <div class="modal-content">
         <div class="modal-header py-2 shadow-sm" style="background:${ colorPokemon }">
@@ -304,7 +318,7 @@ const modalPokedex = async (pokemonName) => {
            
             <div class="row">
               <div class="column col-md">
-                ${ newPokemon(pokemonInfo) }
+                ${ pokemonCard }
               </div>
 
               <div class="column col-md">
@@ -374,7 +388,7 @@ const modalPokedex = async (pokemonName) => {
                                   <nav class="navbar pt-0">
                                     <h6 class="card-text"> Weight </h6>
                                   </nav>
-                                  <p class="card-text"> ${ ((pokemonInfo.weight / 10) * 2.205).toFixed(1) } pound </p>
+                                  <p class="card-text"> ${ weight } pound </p>
                                 </div>
                               </div>
                             </div>
@@ -385,7 +399,7 @@ const modalPokedex = async (pokemonName) => {
                                   <nav class="navbar pt-0">
                                     <h6 class="card-text"> Egg groups </h6>
                                   </nav>
-                                  <p class="card-text"> ${ species.egg_groups.map(name => ` ${ name.name }`) } </p>
+                                  <p class="card-text"> ${ egg_groups } </p>
                                 </div>
                               </div>
                               <div class="col"> 
@@ -424,18 +438,30 @@ const modalPokedex = async (pokemonName) => {
           </div>
         </div>
       </div> `
-    document.querySelector(".btn-close").addEventListener("click", () => { 
+    const endHtml = Date.now();
+    console.log(`Time Taken to execute InnerHTML = ${ (endHtml - startHtml) / 1000 } seconds`);
+
+    btnClose = document.querySelector(".btn-close");
+    cardTitle = document.querySelector(".modal-body .card-title");
+    cardTitleAll = document.querySelectorAll(".modal-body .column .evolution .card .card-title");
+    randomEntriesBtn = document.querySelector("#random-entries-btn")
+    randomEntriesText = document.querySelector(".random-entries")
+
+    btnClose.addEventListener("click", () => { 
       modalDialog.innerHTML = "";
       document.title = "Pokemon"; 
       console.clear(); 
     });
-    document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
-    document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => { 
+
+    cardTitle.removeAttribute("data-bs-toggle", "modal");
+    cardTitleAll.forEach(x => { 
       x.removeAttribute("data-bs-toggle", "modal");
     })
-    document.querySelector("#random-entries-btn").addEventListener("click", async () => {
-      document.querySelector(".random-entries").innerHTML = `${ await randomEntries() }`
+
+    randomEntriesBtn.addEventListener("click", async () => {
+      randomEntriesText.innerHTML = `${ await randomEntries() }`
     })
+    
     modalLoad.classList.add("d-none");
     document.title = `${ pokemonInfo.name } | Pokemon`;
 
