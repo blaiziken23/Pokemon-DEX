@@ -56,7 +56,7 @@ const display = async (promise) => {
 
 let prev = null; 
 let next = null;
-const showData = async (url) => {
+const showData = async (url) => { 
   loader.classList.remove("d-none");
   const link = await api_fetch(url);
   const results = link.results;
@@ -115,5 +115,5 @@ document.querySelector("#search-pokemon").addEventListener("click", async (e) =>
 
 // window scroll
 window.addEventListener("scroll", () => {
-  window.scrollY == 0 ? header.classList.remove("shadow-sm") : header.classList.add("shadow-sm");
+  window.scrollY === 0 ? header.classList.remove("shadow-sm") : header.classList.add("shadow-sm");
 });

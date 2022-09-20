@@ -10,7 +10,7 @@ class Pokemon {
     this.pokemonName = name,
     this.pokemonImage = img,
     this.pokemonType = types;
-    if (this.pokemonImage == null) this.pokemonImage = 'https://raw.githubusercontent.com/blaiziken23/My-Pokedex/main/img/default.png'
+    if (this.pokemonImage == null) this.pokemonImage = 'https://raw.githubusercontent.com/blaiziken23/Pokemon-DEX/main/img/default.png'
   }
 
   card() {
@@ -26,6 +26,20 @@ class Pokemon {
   }
 }
 
+// create function instanciate Pokemon class
+const newPokemon = (promise) => {
+  const pokemon = new Pokemon(
+    promise.id,
+    promise.name,
+    promise.sprites.other['official-artwork'].front_default,
+    promise.types.map(poke_type => {
+      let bgColor = "";
+      for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
+      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
+    }).join("")
+  )
+  return pokemon.card();
+}
 // Color List 
 const typeColor = {
   normal: '#A8A77A',
@@ -416,7 +430,7 @@ const modalPokedex = async (pokemonName) => {
       console.clear(); 
     });
     document.querySelector(".modal-body .card-title").removeAttribute("data-bs-toggle", "modal");
-    document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => {
+    document.querySelectorAll(".modal-body .column .evolution .card .card-title").forEach(x => { 
       x.removeAttribute("data-bs-toggle", "modal");
     })
     document.querySelector("#random-entries-btn").addEventListener("click", async () => {
@@ -434,19 +448,5 @@ const modalPokedex = async (pokemonName) => {
   console.log(`Time Taken to execute = ${ (stop - start) / 1000 } seconds`);
 }
 
-// create function instanciate Pokemon class
-const newPokemon = (promise) => {
-  const pokemon = new Pokemon(
-    promise.id,
-    promise.name,
-    promise.sprites.other['official-artwork'].front_default,
-    promise.types.map(poke_type => {
-      let bgColor = "";
-      for (const type in typeColor) { if (poke_type.type.name == type) bgColor = typeColor[type]; }
-      return `<li class="list-group-item pokemon-type" style="background-color:${bgColor};">${poke_type.type.name}</li>`;
-    }).join("")
-  )
-  return pokemon.card();
-}
 
 export { api_fetch, typeColor, random, removeChild, modalPokedex, newPokemon }
