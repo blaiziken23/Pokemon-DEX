@@ -1,4 +1,6 @@
 let btnClose, cardTitle, cardTitleAll, randomEntriesBtn, randomEntriesText;
+const modalLoad = document.querySelector(".modalLoad");
+const modalDialog = document.querySelector(".modalDialogInfo");
 
 // Fetch api
 const api_fetch = async url => {
@@ -18,9 +20,9 @@ class Pokemon {
   card() {
     return `
       <div class="card shadow-sm">
-        <img src="${ this.pokemonImage }" class="card-img-top p-3" alt="${ this.pokemonName }">
+        <img src="${ this.pokemonImage }" class="card-img-top p-3 " alt="${ this.pokemonName }">
         <div class="card-body py-3 px-0 d-flex flex-column justify-content-center">
-          <h5 class="card-title text-center" data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
+          <h5 class="card-title text-center " data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
           <div class="card-text d-flex justify-content-center gap-1"> ${ this.pokemonType } </div>
           <div class="card-text id"> ${ this.pokemonId }</div>
         </div>
@@ -89,9 +91,6 @@ const removeChild = (parent) => {
 }
 
 // Modal Pokedex -------------------------------------------------------------
-const modalLoad = document.querySelector(".modalLoad");
-const modalDialog = document.querySelector(".modalDialogInfo");
-
 const modalPokedex = async (pokemonName) => {
   const start = Date.now()
 
@@ -99,9 +98,8 @@ const modalPokedex = async (pokemonName) => {
     modalLoad.classList.remove("d-none");
     const pokemonInfo = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ pokemonName }`);
     const species = await api_fetch(pokemonInfo.species.url);
-
-    const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
-    const varieties = await Promise.all(varity).then(x => { return x });
+    // const varity = species.varieties.filter(varity => !varity.is_default).map(varity => api_fetch(varity.pokemon.url));
+    // const varieties = await Promise.all(varity).then(x => { return x });
    
     // pokemonColor 
     let colorPokemon;
@@ -226,6 +224,7 @@ const modalPokedex = async (pokemonName) => {
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
+        console.log(evolutionChain)
         
         const species1 = await api_fetch(evolutionChain.chain.species.url)
         const species1Data = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ species1.id }`)
@@ -259,11 +258,13 @@ const modalPokedex = async (pokemonName) => {
               </div> `
           }
           else {
-            
-            const species3 = checkSpecies3[0].map(x => api_fetch(x.species.url))
-            const species3Data = (await Promise.all(species3).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
+            let species3 = [];
+            for (let i = 0; i < checkSpecies3.length; i++) {
+              species3.push(api_fetch(checkSpecies3[i][0].species.url))
+            }
+            const species3Data = (await Promise.all(species3).then(x => x)).map(y => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ y.id }`))
             const species3Dataa = await Promise.all(species3Data).then(x => {
-              return x.map(y => { return newPokemon(y); }).join("")
+              return x.map( y => { return newPokemon(y) }).join("");
             })
 
             return `
@@ -276,7 +277,7 @@ const modalPokedex = async (pokemonName) => {
                     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                   </svg>
                 </div>
-                <div class="col-evolution col-sm">
+                <div class="col-evolution col-sm lastEvolution">
                   ${ species2Dataa }
                 </div>
                 <div class="col-evolution col-sm-1 p-0">

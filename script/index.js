@@ -86,7 +86,7 @@ randomBtn.addEventListener("click", async () => {
   try {
     let randomData = [];
     const data = await api_fetch(`https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`);
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       const randomPokemon = random(data.count - 1, 0);
       const url = data.results[randomPokemon].url;
       randomData.push(api_fetch(url));
@@ -99,6 +99,7 @@ randomBtn.addEventListener("click", async () => {
   } catch (error) {
     console.log(error);
   }
+  next_prevBtn.classList.add("d-none");
   inputSearch.value = "";
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
