@@ -3,17 +3,19 @@ import { api_fetch, typeColor, random, removeChild, modalPokedex, newPokemon } f
 const pokemonCards = document.querySelector(".pokemon-cards");
 const loader = document.querySelector(".loader");
 const title = document.querySelector(".container-title");
-const next_prevBtn = document.querySelector("#next-prev-btn");
+const next_prevBtn = document.getElementById("next-prev-btn");
 const header = document.querySelector("header");
 const prevBtnEl = document.getElementById("prev");
 const nextBtnEl = document.getElementById("next");
 const randomBtn = document.getElementById("random-pokemon");
 const inputSearch = document.getElementById("input-search");
+const footer = document.getElementById("footer")
 const body = document.body;
 
 const display = async (promise) => {
   try {
-    for (let i = 0; i < promise.length; i++) {
+    const promiseLength = promise.length;
+    for (let i = 0; i < promiseLength; i++) {
       
       pokemonCards.innerHTML += newPokemon(promise[i]);
 
@@ -69,6 +71,7 @@ const showData = async (url) => {
   Promise.all(list).then(data => {
     removeChild(pokemonCards)
     display(data);
+    footer.classList.remove("d-none");
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   });
@@ -82,6 +85,7 @@ showData(`https://pokeapi.co/api/v2/pokemon`);
 // Random
 randomBtn.addEventListener("click", async () => {
   loader.classList.remove("d-none");
+  footer.classList.add("d-none");
   document.querySelector("#next-prev-btn").classList.add("d-none");
   try {
     let randomData = [];
@@ -104,6 +108,8 @@ randomBtn.addEventListener("click", async () => {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   document.title = `Random Pokémon`;
+  footer.classList.remove("d-none");
+
 });
 
 // Search

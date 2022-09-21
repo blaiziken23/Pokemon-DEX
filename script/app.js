@@ -233,27 +233,37 @@ const modalPokedex = async (pokemonName) => {
     const speciesID = async (id) => {
       return api_fetch(`https://pokeapi.co/api/v2/pokemon/${ id }`)
     }
-    
+
+
+
     const displayEvolution = async () => {
       if (evolution != null) {
-        const evolutionChain = await api_fetch(evolution.url);
-        console.log(evolutionChain)
-        
-        const species1 = await api_fetch(evolutionChain.chain.species.url)
+        const Starttesting = Date.now();
+        const evolutionChains = await api_fetch(evolution.url);
+        // console.log(evolutionChains)
+
+        const species1 = await api_fetch(evolutionChains.chain.species.url)
         const species1Data = await speciesID(species1.id)
         const species1DataCard = newPokemon(species1Data);
 
-        const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
-        const species2Data = (await Promise.all(species2).then(x => x)).map(x => speciesID(x.id))
-        const species2DataCard = await speciesData(species2Data);
+        const species2 = evolutionChains.chain.evolves_to.map(x => api_fetch(x.species.url))
+        let species2Data;
+        let species2DataCard;
 
-        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to);
+        const checkSpecies3 = evolutionChains.chain.evolves_to.map(x => x.evolves_to);
         const checkSpecies3Length = checkSpecies3.length;
+
+        const endtesting = Date.now();
+        console.log(`Time Taken to execute evolution Testing = ${ (endtesting - Starttesting) / 1000 } seconds`);
+
         if (species2.length === 0) {
           return noEvolution;
         }
         else {
           if (checkSpecies3[0].length === 0) {
+            species2Data = (await Promise.all(species2).then(x => x)).map(x => speciesID(x.id))
+            species2DataCard = await speciesData(species2Data);
+
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
@@ -271,6 +281,9 @@ const modalPokedex = async (pokemonName) => {
           }
           else {
             let species3 = [];
+            species2Data = (await Promise.all(species2).then(x => x)).map(x => speciesID(x.id))
+            species2DataCard = await speciesData(species2Data);
+
             for (let i = 0; i < checkSpecies3Length; i++) {
               checkSpecies3[i].map(x => {
                 species3.push(api_fetch(x.species.url))
