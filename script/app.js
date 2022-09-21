@@ -316,7 +316,7 @@ const modalPokedex = async (pokemonName) => {
           <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body px-0"> 
-          <div class="container"> 
+          <div class="container overflow-hidden"> 
            
             <div class="row">
               <div class="column col-md">

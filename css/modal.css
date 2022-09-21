@@ -1,17 +1,17 @@
-.modal-fullscreen .modal-body {
+/* .modal-fullscreen .modal-body {
   overflow: initial;
   background: var(--white);
-}
+} */
 .modal-content {
   position: relative;
   background: var(--white);
   color: var(--darkgray);
 }
-.modal-content .modal-header {
+/* .modal-content .modal-header {
   z-index: 1;
   position: sticky;
   top: 0;
-}
+} */
 .modal-body .row > .column {
   padding: 0;
 }
