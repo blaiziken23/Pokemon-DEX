@@ -68,7 +68,7 @@ button:focus, input:focus {
   align-items: center;
   height: 100%;
   width: 100%;
-  background-color: rgb(38 50 56 / 25%);
+  background-color: rgb(38 50 56 / 50%);
 }
 .modalLoad .custom-loader {
   background: 

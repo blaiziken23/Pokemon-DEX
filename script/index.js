@@ -109,7 +109,6 @@ randomBtn.addEventListener("click", async () => {
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   document.title = `Random Pokémon`;
   footer.classList.remove("d-none");
-
 });
 
 // Search
