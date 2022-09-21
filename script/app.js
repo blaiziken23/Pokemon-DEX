@@ -22,7 +22,7 @@ class Pokemon {
       <div class="card shadow-sm">
         <img src="${ this.pokemonImage }" class="card-img-top p-3 " alt="${ this.pokemonName }">
         <div class="card-body py-3 px-0 d-flex flex-column justify-content-center">
-          <h5 class="card-title text-center " data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
+          <h5 class="card-title text-center" id="card-title" data-bs-toggle="modal" data-bs-target="#modalInfo">${ this.pokemonName }</h5>
           <div class="card-text d-flex justify-content-center gap-1"> ${ this.pokemonType } </div>
           <div class="card-text id"> ${ this.pokemonId }</div>
         </div>
@@ -139,7 +139,7 @@ const modalPokedex = async (pokemonName) => {
         <hr class="my-2">`
     }
     const random_entries = await randomEntries();
-    
+
     // ability
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = await Promise.all(ability).then(x => { return x });
@@ -241,12 +241,14 @@ const modalPokedex = async (pokemonName) => {
         
         const species1 = await api_fetch(evolutionChain.chain.species.url)
         const species1Data = await speciesID(species1.id)
+        const species1DataCard = newPokemon(species1Data);
 
         const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
         const species2Data = (await Promise.all(species2).then(x => x)).map(x => speciesID(x.id))
-        
-        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to);
+        const species2DataCard = await speciesData(species2Data);
 
+        const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to);
+        const checkSpecies3Length = checkSpecies3.length;
         if (species2.length === 0) {
           return noEvolution;
         }
@@ -255,7 +257,7 @@ const modalPokedex = async (pokemonName) => {
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
-                  ${ newPokemon(species1Data) }
+                  ${ species1DataCard }
                 </div>
                 <div class="col-evolution svg col-sm-1 p-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -263,22 +265,23 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm ">
-                  ${ await speciesData(species2Data) }
+                  ${ species2DataCard }
                 </div>
               </div> `
           }
           else {
             let species3 = [];
-            for (let i = 0; i < checkSpecies3.length; i++) {
+            for (let i = 0; i < checkSpecies3Length; i++) {
               checkSpecies3[i].map(x => {
                 species3.push(api_fetch(x.species.url))
               })
             }
             const species3Data = (await Promise.all(species3).then(x => x)).map(y => speciesID(y.id))
+            const species3DataCard = await speciesData(species3Data);
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
-                  ${ newPokemon(species1Data) }
+                  ${ species1DataCard }
                 </div>
                 <div class="col-evolution col-sm-1 p-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
@@ -286,7 +289,7 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm lastEvolution">
-                  ${ await speciesData(species2Data) }
+                  ${ species2DataCard }
                 </div>
                 <div class="col-evolution col-sm-1 p-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -295,7 +298,7 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm lastEvolution"> 
-                  ${ await speciesData(species3Data) }
+                  ${ species3DataCard }
                 </div>
               </div> `
           }
@@ -323,7 +326,7 @@ const modalPokedex = async (pokemonName) => {
     modalDialog.innerHTML = `
       <div class="modal-content">
         <div class="modal-header py-2 shadow-sm" style="background:${ colorPokemon }">
-          <button type="button" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" id="btn-close" class="btn-close m-0 shadow-0" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body px-0"> 
           <div class="container overflow-hidden"> 
@@ -369,7 +372,7 @@ const modalPokedex = async (pokemonName) => {
                               </svg>
                             </button>
                         </nav>
-                        <div class="card-text random-entries">
+                        <div class="card-text" id="random-entries">
                           ${ random_entries }
                         </div>
                         <div class="row">   
@@ -451,16 +454,16 @@ const modalPokedex = async (pokemonName) => {
         </div>
       </div> `
 
-    btnClose = document.querySelector(".btn-close");
+    btnClose = document.getElementById("btn-close");
     cardTitle = document.querySelector(".modal-body .card-title");
     cardTitleAll = document.querySelectorAll(".modal-body .column .evolution .card .card-title");
-    randomEntriesBtn = document.querySelector("#random-entries-btn")
-    randomEntriesText = document.querySelector(".random-entries")
+    randomEntriesBtn = document.getElementById("random-entries-btn")
+    randomEntriesText = document.getElementById("random-entries")
 
     btnClose.addEventListener("click", () => { 
       modalDialog.innerHTML = "";
       document.title = "Pokemon"; 
-      console.clear(); 
+      console.clear();
     });
 
     cardTitle.removeAttribute("data-bs-toggle", "modal");
@@ -483,6 +486,5 @@ const modalPokedex = async (pokemonName) => {
   const stop = Date.now()
   console.log(`Time Taken to execute = ${ (stop - start) / 1000 } seconds`);
 }
-
 
 export { api_fetch, typeColor, random, removeChild, modalPokedex, newPokemon }
