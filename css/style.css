@@ -87,6 +87,6 @@ button:focus, input:focus {
   animation: s3 .5s infinite linear;
 }
 .loading-text {
-  color: var(--white);
+  color: var(--gray);
 }
 @keyframes s3 { 100%{transform: rotate(1turn)} }

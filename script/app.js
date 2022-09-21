@@ -138,7 +138,7 @@ const modalPokedex = async (pokemonName) => {
         </figure> 
         <hr class="my-2">`
     }
-
+    const random_entries = await randomEntries();
     // ability
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = await Promise.all(ability).then(x => { return x });
@@ -298,6 +298,10 @@ const modalPokedex = async (pokemonName) => {
         return noEvolution;
       }
     }
+    const StartevolutionChain = Date.now();
+    const evolutionChain = await displayEvolution();
+    const endevolutionChain = Date.now();
+    console.log(`Time Taken to execute evolution await = ${ (endevolutionChain - StartevolutionChain) / 1000 } seconds`);
 
     // Pokemon Weight
     const weight = ((pokemonInfo.weight / 10) * 2.205).toFixed(1);
@@ -360,7 +364,7 @@ const modalPokedex = async (pokemonName) => {
                             </button>
                         </nav>
                         <div class="card-text random-entries">
-                          ${ await randomEntries() }
+                          ${ random_entries }
                         </div>
                         <div class="row">   
                           <div class="col-sm"> 
@@ -433,7 +437,7 @@ const modalPokedex = async (pokemonName) => {
                   <div class="card-header"> 
                     <h4 class="card-text"> Evolution chain </h4>
                   </div>
-                  ${ await displayEvolution() }
+                  ${ evolutionChain }
                 </div>
               </div>
             </div>
