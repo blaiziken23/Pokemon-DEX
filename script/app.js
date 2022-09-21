@@ -244,15 +244,15 @@ const modalPokedex = async (pokemonName) => {
           if (checkSpecies3[0].length === 0) {
             return `
               <div class="row">
-                <div class="col-evolution col-sm-4">
+                <div class="col-evolution col-sm">
                   ${ newPokemon(species1Data) }
                 </div>
-                <div class="col-evolution svg col-sm p-0 justify-content-end">
+                <div class="col-evolution svg col-sm-1 p-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                   </svg>
                 </div>
-                <div class="col-evolution col-sm-7">
+                <div class="col-evolution col-sm">
                   ${ species2Dataa }
                 </div>
               </div> `
@@ -260,13 +260,14 @@ const modalPokedex = async (pokemonName) => {
           else {
             let species3 = [];
             for (let i = 0; i < checkSpecies3.length; i++) {
-              species3.push(api_fetch(checkSpecies3[i][0].species.url))
+              checkSpecies3[i].map(x => {
+                species3.push(api_fetch(x.species.url))
+              })
             }
             const species3Data = (await Promise.all(species3).then(x => x)).map(y => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ y.id }`))
             const species3Dataa = await Promise.all(species3Data).then(x => {
               return x.map( y => { return newPokemon(y) }).join("");
             })
-
             return `
               <div class="row">
                 <div class="col-evolution col-sm">

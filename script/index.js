@@ -86,7 +86,7 @@ randomBtn.addEventListener("click", async () => {
   try {
     let randomData = [];
     const data = await api_fetch(`https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       const randomPokemon = random(data.count - 1, 0);
       const url = data.results[randomPokemon].url;
       randomData.push(api_fetch(url));
