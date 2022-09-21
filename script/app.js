@@ -139,6 +139,7 @@ const modalPokedex = async (pokemonName) => {
         <hr class="my-2">`
     }
     const random_entries = await randomEntries();
+    
     // ability
     const ability = pokemonInfo.abilities.filter(x => !x.is_hidden).map(url => api_fetch(url.ability.url));
     const abilities = await Promise.all(ability).then(x => { return x });
@@ -221,20 +222,29 @@ const modalPokedex = async (pokemonName) => {
         </div>
       </div> `
 
+    const speciesData = async (data) => {
+      return Promise.all(data).then(x => {
+        return x.map(y => {
+          return newPokemon(y);
+        }).join("")
+      })
+    }
+
+    const speciesID = async (id) => {
+      return api_fetch(`https://pokeapi.co/api/v2/pokemon/${ id }`)
+    }
+    
     const displayEvolution = async () => {
       if (evolution != null) {
         const evolutionChain = await api_fetch(evolution.url);
         console.log(evolutionChain)
         
         const species1 = await api_fetch(evolutionChain.chain.species.url)
-        const species1Data = await api_fetch(`https://pokeapi.co/api/v2/pokemon/${ species1.id }`)
+        const species1Data = await speciesID(species1.id)
 
         const species2 = evolutionChain.chain.evolves_to.map(x => api_fetch(x.species.url))
-        const species2Data = (await Promise.all(species2).then(x => x)).map(x => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ x.id }`))
-
-        const species2Dataa = await Promise.all(species2Data).then(x => {
-          return x.map( y => { return newPokemon(y) }).join("");
-        });
+        const species2Data = (await Promise.all(species2).then(x => x)).map(x => speciesID(x.id))
+        
         const checkSpecies3 = evolutionChain.chain.evolves_to.map(x => x.evolves_to);
 
         if (species2.length === 0) {
@@ -253,7 +263,7 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm ">
-                  ${ species2Dataa }
+                  ${ await speciesData(species2Data) }
                 </div>
               </div> `
           }
@@ -264,10 +274,7 @@ const modalPokedex = async (pokemonName) => {
                 species3.push(api_fetch(x.species.url))
               })
             }
-            const species3Data = (await Promise.all(species3).then(x => x)).map(y => api_fetch(`https://pokeapi.co/api/v2/pokemon/${ y.id }`))
-            const species3Dataa = await Promise.all(species3Data).then(x => {
-              return x.map( y => { return newPokemon(y) }).join("");
-            })
+            const species3Data = (await Promise.all(species3).then(x => x)).map(y => speciesID(y.id))
             return `
               <div class="row">
                 <div class="col-evolution col-sm">
@@ -279,7 +286,7 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm lastEvolution">
-                  ${ species2Dataa }
+                  ${ await speciesData(species2Data) }
                 </div>
                 <div class="col-evolution col-sm-1 p-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -288,7 +295,7 @@ const modalPokedex = async (pokemonName) => {
                   </svg>
                 </div>
                 <div class="col-evolution col-sm lastEvolution"> 
-                  ${ species3Dataa }
+                  ${ await speciesData(species3Data) }
                 </div>
               </div> `
           }
@@ -313,7 +320,6 @@ const modalPokedex = async (pokemonName) => {
     const pokemonCard = newPokemon(pokemonInfo);
 
     // modal Content
-    const startHtml = Date.now();
     modalDialog.innerHTML = `
       <div class="modal-content">
         <div class="modal-header py-2 shadow-sm" style="background:${ colorPokemon }">
@@ -444,8 +450,6 @@ const modalPokedex = async (pokemonName) => {
           </div>
         </div>
       </div> `
-    const endHtml = Date.now();
-    console.log(`Time Taken to execute InnerHTML = ${ (endHtml - startHtml) / 1000 } seconds`);
 
     btnClose = document.querySelector(".btn-close");
     cardTitle = document.querySelector(".modal-body .card-title");
@@ -465,7 +469,7 @@ const modalPokedex = async (pokemonName) => {
     })
 
     randomEntriesBtn.addEventListener("click", async () => {
-      randomEntriesText.innerHTML = `${ await randomEntries() }`
+      randomEntriesText.innerHTML = await randomEntries();
     })
     
     modalLoad.classList.add("d-none");
